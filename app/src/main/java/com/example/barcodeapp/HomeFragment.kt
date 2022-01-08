@@ -1,17 +1,20 @@
 package com.example.barcodeapp
 
-import android.content.BroadcastReceiver
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.barcodeapp.adapters.CategoryAdapter
-import com.example.barcodeapp.databinding.FragmentHomeBinding
-import com.example.barcodeapp.models.Category
-import android.content.Intent
-import android.content.IntentFilter
 import com.example.barcodeapp.broadCast.MyReceiver
+import com.example.barcodeapp.databinding.FragmentHomeBinding
+import com.example.barcodeapp.functions.navOptions
+import com.example.barcodeapp.models.Category
 
 
 private const val ARG_PARAM1 = "param1"
@@ -38,7 +41,14 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        categoryAdapter = CategoryAdapter(loadData())
+        categoryAdapter = CategoryAdapter(loadData(), object : CategoryAdapter.OnItemClick {
+            override fun onItemClick(category: Category) {
+                val bundle = Bundle()
+                bundle.putSerializable("category", category)
+                findNavController().navigate(R.id.listFragment, bundle, navOptions())
+            }
+
+        })
         val intent = Intent("nlscan.action.SCANNER_TRIG")
         intent.putExtra("SCAN_TIMEOUT", 4)
         requireContext().sendBroadcast(intent)
@@ -48,6 +58,18 @@ class HomeFragment : Fragment() {
         requireContext().registerReceiver(myReceiver, mFilter)
 
         binding.apply {
+            moreBtn.setOnClickListener {
+                val popupMenu = PopupMenu(requireContext(), moreBtn)
+                popupMenu.menuInflater.inflate(R.menu.menu, popupMenu.menu)
+                popupMenu.setOnMenuItemClickListener {it1 ->
+                    when (it1.itemId) {
+                        R.id.settings -> Toast.makeText(requireContext(), "Settings", Toast.LENGTH_SHORT).show()
+                        R.id.icon -> Toast.makeText(requireContext(), "Icon", Toast.LENGTH_SHORT).show()
+                    }
+                    true
+                }
+                popupMenu.show()
+            }
             rv.adapter = categoryAdapter
         }
 
@@ -58,16 +80,19 @@ class HomeFragment : Fragment() {
 
     private fun loadData(): List<Category> {
         val list = ArrayList<Category>()
-        list.add(Category("Oziq-Ovqatlar", R.drawable.ic_launcher_background))
-        list.add(Category("Mevalar", R.drawable.ic_launcher_foreground))
-        list.add(Category("Sabzavotlar", R.drawable.ic_launcher_background))
-        list.add(Category("Ichimliklar", R.drawable.ic_launcher_foreground))
-        list.add(Category("Ichimliklar", R.drawable.ic_launcher_background))
-        list.add(Category("Oziq-Ovqatlar", R.drawable.ic_launcher_background))
-        list.add(Category("Mevalar", R.drawable.ic_launcher_foreground))
-        list.add(Category("Sabzavotlar", R.drawable.ic_launcher_background))
-        list.add(Category("Ichimliklar", R.drawable.ic_launcher_foreground))
-        list.add(Category("Ichimliklar", R.drawable.ic_launcher_background))
+        list.add(Category("Oziq-Ovqatlar", R.drawable.food_svg))
+        list.add(Category("Mevalar", R.drawable.fruits_svg))
+        list.add(Category("Sabzavotlar", R.drawable.vegatable_svg))
+        list.add(Category("Ichimliklar", R.drawable.drinks_svg))
+        list.add(Category("Ichimliklar", R.drawable.drinks_svg))
+        list.add(Category("Oziq-Ovqatlar", R.drawable.food_svg))
+        list.add(Category("Mevalar", R.drawable.fruits_svg))
+        list.add(Category("Sabzavotlar", R.drawable.vegatable_svg))
+        list.add(Category("Ichimliklar", R.drawable.drinks_svg))
+        list.add(Category("Ichimliklar", R.drawable.drinks_svg))
+        list.add(Category("Mevalar", R.drawable.fruits_svg))
+        list.add(Category("Oziq-Ovqatlar", R.drawable.food_svg))
+        list.add(Category("Sabzavotlar", R.drawable.vegatable_svg))
         return list
     }
 

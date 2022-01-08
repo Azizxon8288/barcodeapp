@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.barcodeapp.databinding.ItemCategoryBinding
 import com.example.barcodeapp.models.Category
 
-class CategoryAdapter(var list: List<Category>) :
+class CategoryAdapter(var list: List<Category>, var listener:OnItemClick) :
     RecyclerView.Adapter<CategoryAdapter.MyViewHolder>() {
     inner class MyViewHolder(var itemCategoryBinding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(itemCategoryBinding.root) {
@@ -14,6 +14,9 @@ class CategoryAdapter(var list: List<Category>) :
             itemCategoryBinding.apply {
                 tv.text = category.name
                 image.setImageResource(category.image)
+            }
+            itemView.setOnClickListener {
+                listener.onItemClick(category)
             }
         }
     }
@@ -34,5 +37,9 @@ class CategoryAdapter(var list: List<Category>) :
 
     override fun getItemCount(): Int = list.size
 
+
+    interface OnItemClick {
+        fun onItemClick(category: Category)
+    }
 
 }
