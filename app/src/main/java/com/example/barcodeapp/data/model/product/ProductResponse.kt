@@ -1,9 +1,9 @@
 package com.example.barcodeapp.data.model.product
 
-import com.example.barcodeapp.data.model.category.CategoryResponse
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.math.BigDecimal
+import com.example.barcodeapp.data.model.category.CategoryResponse
 
 @Serializable
 data class ProductResponse(

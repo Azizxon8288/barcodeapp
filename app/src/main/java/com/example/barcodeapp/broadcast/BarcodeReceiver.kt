@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.example.barcodeapp.ProductDetailsFragment
 
 class BarcodeReceiver : BroadcastReceiver() {
     private val TAG = "MyReceiver"
@@ -14,6 +15,8 @@ class BarcodeReceiver : BroadcastReceiver() {
         if ("ok" == scanStatus) {
             Log.d(TAG, "onReceive: $scannedBarcode")
             Toast.makeText(context, scannedBarcode, Toast.LENGTH_SHORT).show()
+//            val action = Intent(context, ProductDetailsFragment::class.java)
+
             // TODO: 1/17/2022 Shetta search(scannedBarcode); function chaqirishili kerak keyin
             // TODO: 1/17/2022 bu funksiya scannedBarcode ga teng bo'lga mahsulotlni databsedan izlashi va topilsa ProductDetails fragmentda topilgan mahsulot ma'lumotlarini chiqarishi kereak
             // TODO: 1/17/2022 aks holda bunday mahsulot topilmaganligini bildirish kerak

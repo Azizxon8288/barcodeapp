@@ -1,8 +1,8 @@
 package com.example.barcodeapp.data.model.product
 
 
+import androidx.room.Entity
 import com.example.barcodeapp.data.model.category.Category
-
 data class Product(
     val id: String,
     val barcode: String,

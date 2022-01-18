@@ -1,11 +1,14 @@
-package com.example.barcodeapp.data.model.category
+package com.example.barcodeapp.data.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
-data class Category(
+@Entity
+data class CategoryEntity(
+    @PrimaryKey
     val id: String,
     val productCount: Int,
     val name: String,
     val imageUrl: String?
-)
+) : Serializable
