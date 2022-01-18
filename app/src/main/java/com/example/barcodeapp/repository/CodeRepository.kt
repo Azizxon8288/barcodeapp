@@ -5,6 +5,7 @@ import com.example.barcodeapp.data.model.GithubUser
 import com.example.barcodeapp.data.model.category.CategoryResponse
 import com.example.barcodeapp.data.room.AppDatabase
 import com.example.barcodeapp.data.room.entities.CategoryEntity
+import com.example.barcodeapp.data.room.entities.ProductEntity
 import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.data.service.Webservice
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +19,10 @@ class CodeRepository(val appDatabase: AppDatabase, val webservice: Webservice) {
 
     fun getUsers(): Flow<Response<List<GithubUser>>> {
         return flow { emit(webservice.getUsers()) }
+    }
+
+    fun searchByBarCode(barcode: String?): Flow<ProductEntity> {
+        return flow { emit(appDatabase.productDao().searchByBarCode(barcode)) }
     }
 
     fun addDbCategories(list: List<CategoryEntity>) {

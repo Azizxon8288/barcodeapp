@@ -77,7 +77,6 @@ class HomeFragment : Fragment() {
 
                     }
                     is UsersResource.Success -> {
-                        it.list
                         Log.d(TAG, "onCreateView: ${it.list}")
                     }
                     is UsersResource.Loading -> {

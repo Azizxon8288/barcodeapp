@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.barcodeapp.data.mapper.category.mapToCategory
 import com.example.barcodeapp.data.room.entities.CategoryEntity
+import com.example.barcodeapp.data.room.entities.ProductEntity
 import com.example.barcodeapp.functions.NetworkHelper
 import com.example.barcodeapp.repository.CodeRepository
 import com.example.barcodeapp.resource.CategoryResource
+import com.example.barcodeapp.resource.SearchResource
 import com.example.barcodeapp.resource.UsersResource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +21,20 @@ class CategoryViewModel(
     private val repository: CodeRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
+
+
+    fun searchByBarCode(barcode: String?): StateFlow<SearchResource> {
+        val stateFlow = MutableStateFlow<SearchResource>(SearchResource.Loading)
+
+        viewModelScope.launch {
+            repository.searchByBarCode(barcode).catch {
+                stateFlow.value=SearchResource.Error(it.message.toString())
+            }.collect{
+                stateFlow.value=SearchResource.Success(it)
+            }
+        }
+        return stateFlow
+    }
 
     fun getAllCategories(): StateFlow<CategoryResource> {
         val stateFlow = MutableStateFlow<CategoryResource>(CategoryResource.Loading)
@@ -35,7 +51,9 @@ class CategoryViewModel(
                             list1.add(CategoryEntity(it.id, it.productCount, it.name, it.imageUrl))
                         }
                         repository.addDbCategories(list1)
-                        stateFlow.value = CategoryResource.Success(repository.appDatabase.categoryDao().getAllCategory())
+                        stateFlow.value = CategoryResource.Success(
+                            repository.appDatabase.categoryDao().getAllCategory()
+                        )
                     } else {
                         when {
                             response.code() in 400..499 -> {
