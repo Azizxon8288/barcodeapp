@@ -1,5 +1,8 @@
 package com.example.barcodeapp.viewmodels
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.barcodeapp.data.mapper.category.mapToCategory
@@ -28,9 +31,10 @@ class CategoryViewModel(
 
         viewModelScope.launch {
             repository.searchByBarCode(barcode).catch {
-                stateFlow.value=SearchResource.Error(it.message.toString())
-            }.collect{
-                stateFlow.value=SearchResource.Success(it)
+                stateFlow.value = SearchResource.Error(it.message.toString())
+            }.collect {
+                Log.d("TAG", "searchByBarCode: ${it.barcode}")
+                stateFlow.value = SearchResource.Success(it)
             }
         }
         return stateFlow
@@ -50,10 +54,13 @@ class CategoryViewModel(
                         list?.forEach {
                             list1.add(CategoryEntity(it.id, it.productCount, it.name, it.imageUrl))
                         }
+//                        list?.mapToCategory()
                         repository.addDbCategories(list1)
+//                        stateFlow.value = CategoryResource.Success(repository.getDBCategories())
                         stateFlow.value = CategoryResource.Success(
                             repository.appDatabase.categoryDao().getAllCategory()
                         )
+                        stateFlow.emit(CategoryResource.Success(list1))
                     } else {
                         when {
                             response.code() in 400..499 -> {
@@ -67,6 +74,13 @@ class CategoryViewModel(
                             }
                         }
                     }
+                }
+            } else {
+                // db yoziladi
+                repository.getDBCategories().catch {
+                    stateFlow.value = CategoryResource.Error("Bazada malumot yuq")
+                }.collect {
+                    stateFlow.value = CategoryResource.Success(it)
                 }
             }
         }
@@ -83,8 +97,8 @@ class CategoryViewModel(
                     stateFlow.value = UsersResource.Error(it.message ?: "")
                 }.collect { response ->
                     if (response.isSuccessful) {
-                        val list = response.body()
                         stateFlow.value = UsersResource.Success(response.body())
+//                        stateFlow.emit(UsersResource.Success(response.body()))
                     } else {
                         when {
                             response.code() in 400..499 -> {
@@ -99,6 +113,8 @@ class CategoryViewModel(
                         }
                     }
                 }
+            } else {
+                // db yoziladi
             }
         }
 

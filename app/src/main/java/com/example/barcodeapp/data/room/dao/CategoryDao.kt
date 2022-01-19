@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
+import com.example.barcodeapp.data.model.GithubUser
 import com.example.barcodeapp.data.model.category.Category
 import com.example.barcodeapp.data.room.entities.CategoryEntity
 
@@ -11,9 +12,8 @@ import com.example.barcodeapp.data.room.entities.CategoryEntity
 interface CategoryDao {
 
     @Insert(onConflict = REPLACE)
-    fun addList(categoryList: List<CategoryEntity>)
+    suspend fun addList(categoryList: List<CategoryEntity>)
 
     @Query("select * from categoryentity")
-    fun getAllCategory(): List<CategoryEntity>
-
+    suspend fun getAllCategory(): List<CategoryEntity>
 }

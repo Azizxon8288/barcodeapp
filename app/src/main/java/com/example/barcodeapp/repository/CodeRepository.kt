@@ -13,23 +13,21 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 class CodeRepository(val appDatabase: AppDatabase, val webservice: Webservice) {
-    fun getAllCategory(): Flow<Response<List<CategoryResponse>>> {
+    suspend fun getAllCategory(): Flow<Response<List<CategoryResponse>>> {
         return flow { emit(webservice.getAllCategories()) }
     }
 
-    fun getUsers(): Flow<Response<List<GithubUser>>> {
+    suspend fun getUsers(): Flow<Response<List<GithubUser>>> {
         return flow { emit(webservice.getUsers()) }
     }
 
-    fun searchByBarCode(barcode: String?): Flow<ProductEntity> {
+    suspend fun searchByBarCode(barcode: String?): Flow<ProductEntity> {
         return flow { emit(appDatabase.productDao().searchByBarCode(barcode)) }
     }
 
-    fun addDbCategories(list: List<CategoryEntity>) {
+    suspend fun addDbCategories(list: List<CategoryEntity>) {
         appDatabase.categoryDao().addList(list)
     }
 
-    fun getDBCategories(): Flow<List<CategoryEntity>> {
-        return flow { emit(appDatabase.categoryDao().getAllCategory()) }
-    }
+    suspend fun getDBCategories() = flow { emit(appDatabase.categoryDao().getAllCategory()) }
 }
