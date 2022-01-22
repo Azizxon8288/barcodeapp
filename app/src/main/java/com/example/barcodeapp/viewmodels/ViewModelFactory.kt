@@ -13,6 +13,8 @@ class ViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CategoryViewModel::class.java)) {
             return CategoryViewModel(repository, networkHelper) as T
+        } else if (modelClass.isAssignableFrom(ProductViewModel::class.java)) {
+            return ProductViewModel(repository, networkHelper) as T
         }
         throw Exception("Error")
     }

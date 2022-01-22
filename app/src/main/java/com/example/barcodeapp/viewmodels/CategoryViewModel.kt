@@ -57,9 +57,7 @@ class CategoryViewModel(
 //                        list?.mapToCategory()
                         repository.addDbCategories(list1)
 //                        stateFlow.value = CategoryResource.Success(repository.getDBCategories())
-                        stateFlow.value = CategoryResource.Success(
-                            repository.appDatabase.categoryDao().getAllCategory()
-                        )
+                        stateFlow.value = CategoryResource.Success(list1)
                         stateFlow.emit(CategoryResource.Success(list1))
                     } else {
                         when {

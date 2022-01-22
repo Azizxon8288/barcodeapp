@@ -1,14 +1,13 @@
 package com.example.barcodeapp
 
 //import com.example.barcodeapp.adapters.CategoryAdapter
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.media.audiofx.DynamicsProcessing
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +19,6 @@ import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
-import com.example.barcodeapp.broadcast.BarcodeReceiver
 import com.example.barcodeapp.data.room.AppDatabase
 import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.databinding.FragmentHomeBinding
@@ -31,9 +29,7 @@ import com.example.barcodeapp.resource.UsersResource
 import com.example.barcodeapp.viewmodels.CategoryViewModel
 import com.example.barcodeapp.viewmodels.ViewModelFactory
 import com.example.barcodeapp.worker.UploadWorker
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 
 
@@ -140,24 +136,6 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    //    private fun loadData(): List<Category> {
-//        val list = ArrayList<Category>()
-//        list.add(Category("Oziq-Ovqatlar", R.drawable.food_svg))
-//        list.add(Category("Mevalar", R.drawable.fruits_svg))
-//        list.add(Category("Sabzavotlar", R.drawable.vegatable_svg))
-//        list.add(Category("Ichimliklar", R.drawable.drinks_svg))
-//        list.add(Category("Ichimliklar", R.drawable.drinks_svg))
-//        list.add(Category("Oziq-Ovqatlar", R.drawable.food_svg))
-//        list.add(Category("Mevalar", R.drawable.fruits_svg))
-//        list.add(Category("Sabzavotlar", R.drawable.vegatable_svg))
-//        list.add(Category("Ichimliklar", R.drawable.drinks_svg))
-//        list.add(Category("Ichimliklar", R.drawable.drinks_svg))
-//        list.add(Category("Mevalar", R.drawable.fruits_svg))
-//        list.add(Category("Oziq-Ovqatlar", R.drawable.food_svg))
-//        list.add(Category("Sabzavotlar", R.drawable.vegatable_svg))
-//        return list
-//    }
     inner class BarCode : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
 
@@ -165,18 +143,20 @@ class HomeFragment : Fragment() {
             val scanStatus = p1?.getStringExtra("SCAN_STATE")
 
             if ("ok" == scanStatus) {
-                Log.d(TAG, "onReceive: $scannedBarcode")
+                Log.d(TAG, "onReceive barcode: $scannedBarcode")
                 Toast.makeText(p0, scannedBarcode, Toast.LENGTH_SHORT).show()
                 lifecycleScope.launch {
                     categoryViewModel.searchByBarCode(scannedBarcode).collect {
                         when (it) {
                             is SearchResource.Error -> {
-                                Toast.makeText(p0, it.message, Toast.LENGTH_SHORT).show()
+                                Log.d(TAG, "onReceive error: ${it.message}")
+                                Toast.makeText(p0, "Bazada bunday maxsulot yuq", Toast.LENGTH_SHORT)
+                                    .show()
                             }
                             is SearchResource.Success -> {
-                                Log.d(TAG, "onReceive: ${it.productEntity}")
+                                Log.d(TAG, "onReceive success: ${it.productEntity}")
                                 Toast.makeText(p0, "${it.productEntity}", Toast.LENGTH_SHORT).show()
-                                val action = Intent(context, ProductDetailsFragment::class.java)
+                                val action = Intent(p0, ProductDetailsFragment::class.java)
                                 action.putExtra("search", it.productEntity)
                                 p0?.startActivity(action)
                             }
@@ -189,7 +169,7 @@ class HomeFragment : Fragment() {
 
             } else {
                 Log.d(TAG, "onReceive: Scanner bulmadi")
-                Toast.makeText(context, "Scanner bulmadi", Toast.LENGTH_SHORT).show()
+                Toast.makeText(p0, "Scanner bulmadi", Toast.LENGTH_SHORT).show()
             }
         }
 
