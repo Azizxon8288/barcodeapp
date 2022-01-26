@@ -26,15 +26,15 @@ class CategoryViewModel(
 ) : ViewModel() {
 
 
-    fun searchByBarCode(barcode: String?): StateFlow<SearchResource> {
+    fun searchByBarCode(barcode: String): StateFlow<SearchResource> {
         val stateFlow = MutableStateFlow<SearchResource>(SearchResource.Loading)
 
         viewModelScope.launch {
             repository.searchByBarCode(barcode).catch {
                 stateFlow.value = SearchResource.Error(it.message.toString())
             }.collect {
-                Log.d("TAG", "searchByBarCode: ${it.barcode}")
-                stateFlow.value = SearchResource.Success(it)
+                Log.d("TAG", "searchByBarCode: ${it?.barcode}")
+                stateFlow.value = SearchResource.Success(it!!)
             }
         }
         return stateFlow

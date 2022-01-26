@@ -28,6 +28,9 @@ data class ProductResponse(
     @SerialName("description")
     val description: String? = null,
 
-    @SerialName("categoryDTO")
+    @SerialName("imageUrl")
+    val imageUrl: String? = null,
+
+    @SerialName("category")
     val category: CategoryResponse,
 )

@@ -1,13 +1,11 @@
 package com.example.barcodeapp.repository
 
-import com.example.barcodeapp.data.mapper.category.mapToCategory
 import com.example.barcodeapp.data.model.GithubUser
 import com.example.barcodeapp.data.model.category.CategoryResponse
 import com.example.barcodeapp.data.model.product.ProductResponse
 import com.example.barcodeapp.data.room.AppDatabase
 import com.example.barcodeapp.data.room.entities.CategoryEntity
 import com.example.barcodeapp.data.room.entities.ProductEntity
-import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.data.service.Webservice
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -22,10 +20,10 @@ class CodeRepository(val appDatabase: AppDatabase, val webservice: Webservice) {
     }
 
     suspend fun addDbProducts(list: List<ProductEntity>) {
-        appDatabase.productDao().addList(list)
+        appDatabase.productDao().addAll(list)
     }
 
-    suspend fun getDBProducts() = flow { emit(appDatabase.productDao().getAllProduct()) }
+    suspend fun getDBProducts() = flow { emit(appDatabase.productDao().getAll()) }
 
 
     // shunchaki
@@ -37,7 +35,7 @@ class CodeRepository(val appDatabase: AppDatabase, val webservice: Webservice) {
 
     //  Search
 
-    suspend fun searchByBarCode(barcode: String?): Flow<ProductEntity> {
+    suspend fun searchByBarCode(barcode: String): Flow<ProductEntity?> {
         return flow { emit(appDatabase.productDao().searchByBarCode(barcode)) }
     }
 
@@ -46,10 +44,10 @@ class CodeRepository(val appDatabase: AppDatabase, val webservice: Webservice) {
 
 
     suspend fun addDbCategories(list: List<CategoryEntity>) {
-        appDatabase.categoryDao().addList(list)
+        appDatabase.categoryDao().addAll(list)
     }
 
-    suspend fun getDBCategories() = flow { emit(appDatabase.categoryDao().getAllCategory()) }
+    suspend fun getDBCategories() = flow { emit(appDatabase.categoryDao().getAll()) }
 
 
     suspend fun getAllCategory(): Flow<Response<List<CategoryResponse>>> {

@@ -14,12 +14,10 @@ import com.example.barcodeapp.functions.NetworkHelper
 import com.example.barcodeapp.repository.CodeRepository
 import com.example.barcodeapp.viewmodels.CategoryViewModel
 import com.example.barcodeapp.viewmodels.ViewModelFactory
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 
-class BarcodeReceiver : BroadcastReceiver(){
+class BarcodeReceiver : BroadcastReceiver() {
     private val TAG = "MyReceiver"
     private lateinit var appDatabase: AppDatabase
     private lateinit var networkHelper: NetworkHelper
@@ -31,31 +29,32 @@ class BarcodeReceiver : BroadcastReceiver(){
 
 //        categoryViewModel = ViewModelProvider(, ViewModelFactory(CodeRepository(appDatabase, ApiClient.webservice), networkHelper))[CategoryViewModel::class.java]
 
-        val scannedBarcode = intent.getStringExtra("SCAN_BARCODE1")
+        val scannedBarcode = intent.getStringExtra("SCAN_BARCODE1") ?: ""
         val scanStatus = intent.getStringExtra("SCAN_STATE")
         if ("ok" == scanStatus) {
             Log.d(TAG, "onReceive: $scannedBarcode")
+
             Toast.makeText(context, scannedBarcode, Toast.LENGTH_SHORT).show()
-            val productEntity = appDatabase.productDao().searchByBarCode(scannedBarcode)
-            val searchByBarCodeBoolean =
-                appDatabase.productDao().searchByBarCodeBoolean(scannedBarcode)
-            if (searchByBarCodeBoolean) {
-                val action = Intent(context, ProductDetailsFragment::class.java)
-                action.putExtra("search", productEntity)
-                context.startActivity(action)
-            } else {
-                Toast.makeText(context, "Bunday malumot topilmadi", Toast.LENGTH_SHORT).show()
+
+            GlobalScope.launch(Dispatchers.IO) {
+                val productEntity = appDatabase.productDao().searchByBarCode(scannedBarcode)
+
+                if (productEntity != null) {
+                    val action = Intent(context, ProductDetailsFragment::class.java)
+                    action.putExtra("search", productEntity)
+                    context.startActivity(action)
+                } else {
+                    // TODO: 1/26/2022 Betda alohida not found 404 fragment ochilishi kerak
+                }
             }
+
+
+
 //            GlobalScope.launch {
 //                categoryViewModel.searchByBarCode(scannedBarcode).collect {
 //
 //                }
 
-
-
-            // 1/17/2022 Shetta search(scannedBarcode); function chaqirishili kerak keyin
-            // 1/17/2022 bu funksiya scannedBarcode ga teng bo'lga mahsulotlni databsedan izlashi va topilsa ProductDetails fragmentda topilgan mahsulot ma'lumotlarini chiqarishi kereak
-            // 1/17/2022 aks holda bunday mahsulot topilmaganligini bildirish kerak
         } else {
             Log.d(TAG, "onReceive: Uxshamadi")
             Toast.makeText(context, "Scanner bulmadi", Toast.LENGTH_SHORT).show()

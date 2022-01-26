@@ -136,10 +136,11 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     inner class BarCode : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
 
-            val scannedBarcode = p1?.getStringExtra("SCAN_BARCODE1")
+            val scannedBarcode = p1?.getStringExtra("SCAN_BARCODE1") ?: ""
             val scanStatus = p1?.getStringExtra("SCAN_STATE")
 
             if ("ok" == scanStatus) {

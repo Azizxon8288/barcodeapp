@@ -11,5 +11,6 @@ data class Product(
     val salesPrice: Double,
     val name: String,
     val description: String,
+    val imageUrl: String,
     val category: Category,
 )

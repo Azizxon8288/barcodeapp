@@ -7,9 +7,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface Webservice {
-    // 1/17/2022 getBranches
-
-
     @GET()
     suspend fun getAllProducts(): Response<List<ProductResponse>>
 

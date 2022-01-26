@@ -13,12 +13,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CategoryDao {
 
-
-//    @Query("SELECT * FROM person_table WHERE firstName LIKE :searchQuery OR lastName LIKE :searchQuery") // search ikkitali
-
     @Insert(onConflict = REPLACE)
-    suspend fun addList(categoryList: List<CategoryEntity>)
+    suspend fun addAll(categoryList: List<CategoryEntity>)
 
     @Query("select * from categoryentity")
-    suspend fun getAllCategory(): List<CategoryEntity>
+    suspend fun getAll(): List<CategoryEntity>
 }
