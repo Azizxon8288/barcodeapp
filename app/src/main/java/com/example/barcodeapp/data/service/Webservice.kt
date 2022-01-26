@@ -6,14 +6,15 @@ import com.example.barcodeapp.data.model.product.ProductResponse
 import retrofit2.Response
 import retrofit2.http.GET
 
+
 interface Webservice {
     // 1/17/2022 getBranches
 
 
-    @GET()
+    @GET("product/get")
     suspend fun getAllProducts(): Response<List<ProductResponse>>
 
-    @GET()
+    @GET("category/get")
     suspend fun getAllCategories(): Response<List<CategoryResponse>>
 
     @GET("users")

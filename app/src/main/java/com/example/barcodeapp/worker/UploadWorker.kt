@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.collect
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.suspendCoroutine
 
-@DelicateCoroutinesApi
 class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {
     private lateinit var repository: CodeRepository

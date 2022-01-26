@@ -36,16 +36,16 @@ class BarcodeReceiver : BroadcastReceiver(){
         if ("ok" == scanStatus) {
             Log.d(TAG, "onReceive: $scannedBarcode")
             Toast.makeText(context, scannedBarcode, Toast.LENGTH_SHORT).show()
-            val productEntity = appDatabase.productDao().searchByBarCode(scannedBarcode)
-            val searchByBarCodeBoolean =
-                appDatabase.productDao().searchByBarCodeBoolean(scannedBarcode)
-            if (searchByBarCodeBoolean) {
-                val action = Intent(context, ProductDetailsFragment::class.java)
-                action.putExtra("search", productEntity)
-                context.startActivity(action)
-            } else {
-                Toast.makeText(context, "Bunday malumot topilmadi", Toast.LENGTH_SHORT).show()
-            }
+//            val productEntity = appDatabase.productDao().searchByBarCode(scannedBarcode)
+//            val searchByBarCodeBoolean =
+//                appDatabase.productDao().searchByBarCodeBoolean(scannedBarcode)
+//            if (searchByBarCodeBoolean) {
+//                val action = Intent(context, ProductDetailsFragment::class.java)
+//                action.putExtra("search", productEntity)
+//                context.startActivity(action)
+//            } else {
+//                Toast.makeText(context, "Bunday malumot topilmadi", Toast.LENGTH_SHORT).show()
+//            }
 //            GlobalScope.launch {
 //                categoryViewModel.searchByBarCode(scannedBarcode).collect {
 //

@@ -15,15 +15,20 @@ interface ProductDao {
     @Query("select * from productentity")
     suspend fun getAllProduct(): List<ProductEntity>
 
-//    @Query("select * from productentity where code like :searchQuery or code like :searchQuery")
-//    suspend fun productByCodeSearch(searchQuery: String): List<ProductEntity>
-//
+    @Query("select * from productentity where categoryId =:categoryId")
+    fun getProductsByCategoryId(categoryId: String): List<ProductEntity>
+
+    // main search shu
+    @Query("select * from productentity where name like :searchQuery or barcode like :searchQuery")
+    suspend fun productByCodeSearch(searchQuery: String): List<ProductEntity>
+
+
 //    @Query("select * from productentity where barcode like :str or barcode like :str")
 //    suspend fun productByBarCodeSearch(str: String): List<ProductEntity>
 
     @Query("select * from productentity where barcode = :barcode")
-    suspend fun searchByBarCode(barcode: String?): ProductEntity
+    fun searchByBarCode(barcode: String?): ProductEntity
 
     @Query("select * from productentity where barcode = :barcode")
-    suspend fun searchByBarCodeBoolean(barcode: String?): Boolean
+    fun searchByBarCodeBoolean(barcode: String?): Boolean
 }

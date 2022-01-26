@@ -24,11 +24,13 @@ import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.databinding.FragmentHomeBinding
 import com.example.barcodeapp.functions.NetworkHelper
 import com.example.barcodeapp.repository.CodeRepository
+import com.example.barcodeapp.resource.CategoryResource
 import com.example.barcodeapp.resource.SearchResource
 import com.example.barcodeapp.resource.UsersResource
 import com.example.barcodeapp.viewmodels.CategoryViewModel
 import com.example.barcodeapp.viewmodels.ViewModelFactory
 import com.example.barcodeapp.worker.UploadWorker
+import com.mocklets.pluto.Pluto
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -76,15 +78,16 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launch {
             /**(Dispatchers.Main)**/
-            categoryViewModel.getUsers().collect {
+            categoryViewModel.getAllCategories().collect {
                 when (it) {
-                    is UsersResource.Error -> {
-
+                    is CategoryResource.Error -> {
+                        Log.d(TAG, "onCreateView: ${it.message}")
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
-                    is UsersResource.Success -> {
+                    is CategoryResource.Success -> {
                         Log.d(TAG, "onCreateView: ${it.list}")
                     }
-                    is UsersResource.Loading -> {
+                    is CategoryResource.Loading -> {
 
                     }
                 }
@@ -102,21 +105,21 @@ class HomeFragment : Fragment() {
         WorkManager.getInstance(requireContext()).enqueue(workRequest)
 
 
-//        val uploadWorkRequest: WorkRequest =
-//            OneTimeWorkRequestBuilder<UploadWorker>()
-//                .setScheduleRequestedAt(15, TimeUnit.MINUTES)
-//                .build()
-//        WorkManager.getInstance(requireContext()).enqueue(uploadWorkRequest)
+        /**        val uploadWorkRequest: WorkRequest =
+        OneTimeWorkRequestBuilder<UploadWorker>()
+        .setScheduleRequestedAt(15, TimeUnit.MINUTES)
+        .build()
+        WorkManager.getInstance(requireContext()).enqueue(uploadWorkRequest)
 
 
-//        categoryAdapter = CategoryAdapter(loadData(), object : CategoryAdapter.OnItemClick {
-//            override fun onItemClick(category: Category) {
-//                val bundle = Bundle()
-//                bundle.putSerializable("category", category)
-//                findNavController().navigate(R.id.listFragment, bundle, navOptions())
-//            }
-//
-//        })
+        categoryAdapter = CategoryAdapter(loadData(), object : CategoryAdapter.OnItemClick {
+        override fun onItemClick(category: Category) {
+        val bundle = Bundle()
+        bundle.putSerializable("category", category)
+        findNavController().navigate(R.id.listFragment, bundle, navOptions())
+        }
+
+        })**/
 
 
         val barcodeReceiver = BarCode()
@@ -136,6 +139,7 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     inner class BarCode : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
 

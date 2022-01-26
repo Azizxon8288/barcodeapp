@@ -60,6 +60,12 @@ dependencies {
     //retrofit
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+
+    // pluto
+    debugImplementation 'com.mocklets:pluto:1.1.1'
+    releaseImplementation 'com.mocklets:pluto-no-op:1.1.1'
+
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
 
 

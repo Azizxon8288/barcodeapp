@@ -27,6 +27,9 @@ class CodeRepository(val appDatabase: AppDatabase, val webservice: Webservice) {
 
     suspend fun getDBProducts() = flow { emit(appDatabase.productDao().getAllProduct()) }
 
+    suspend fun getDbProductByCategoryId(categoryId: String) =
+        flow { emit(appDatabase.productDao().getProductsByCategoryId(categoryId)) }
+
 
     // shunchaki
 
