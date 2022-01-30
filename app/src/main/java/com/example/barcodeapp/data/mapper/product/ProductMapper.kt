@@ -10,7 +10,7 @@ fun List<ProductResponse>.map() =
 fun ProductResponse.mapToProduct() =
     Product(
         id = id,
-        barcode = barcode ?: "",
+        barcodes = barcodes ?: emptyList(),
         code = code ?: 0,
         measurement = measurement ?: "",
         salesPrice = salesPrice ?: 0.0,

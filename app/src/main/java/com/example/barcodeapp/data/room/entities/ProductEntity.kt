@@ -8,7 +8,7 @@ import java.io.Serializable
 data class ProductEntity(
     @PrimaryKey
     val id: String,
-    val barcode: String?,
+    val barcodes: ArrayList<String>?,
     val code: Int,
     val measurement: String,
     val salesPrice: Double,

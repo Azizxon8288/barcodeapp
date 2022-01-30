@@ -20,10 +20,11 @@ class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {
     private lateinit var repository: CodeRepository
     private lateinit var networkHelper: NetworkHelper
+    private lateinit var job: Job
     override fun doWork(): Result {
 
         networkHelper = NetworkHelper(applicationContext)
-
+        job = Job()
         repository =
             CodeRepository(AppDatabase.getInstance(applicationContext), ApiClient.webservice)
         GlobalScope.launch {
@@ -53,14 +54,14 @@ class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
 
                 repository.getAllProduct().catch {
 
-                }.collect {
+                }.collect {it->
                     if (it.isSuccessful) {
                         val list = ArrayList<ProductEntity>()
                         it.body()?.forEach {
                             list.add(
                                 ProductEntity(
                                     it.id,
-                                    it.barcode ?: "",
+                                    it.barcodes?: arrayListOf(),
                                     it.code ?: 0,
                                     it.measurement ?: "",
                                     it.salesPrice ?: 0.0,
@@ -83,5 +84,6 @@ class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
         // Indicate whether the work finished successfully with the Result
         return Result.success()
     }
+
 
 }

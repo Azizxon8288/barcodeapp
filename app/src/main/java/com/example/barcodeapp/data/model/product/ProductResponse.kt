@@ -10,8 +10,8 @@ data class ProductResponse(
     @SerialName("id")
     val id: String,
 
-    @SerialName("barcode")
-    val barcode: String? = null,
+    @SerialName("barcodes")
+    val barcodes: ArrayList<String>? = null,
 
     @SerialName("code")
     val code: Int? = null,

@@ -1,20 +1,37 @@
 package com.example.barcodeapp.data.service
 
 import com.mocklets.pluto.PlutoInterceptor
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    const val BASE_URL = "http://185.196.214.27/PRICE_CHECKER/hs/price/"
-
+    //    const val BASE_URL = "http://185.196.214.27/PRICE_CHECKER/hs/price/"
+    const val BASE_URL = "https://jsonplaceholder.typicode.com/"
+    const val TOKEN = "0JDQtNC80LjQvdGB0YLRgNCw0YLQvtGAOg=="
+//    const val TOKEN="Basic 0JDQtNC80LjQvdGB0YLRgNCw0YLQvtGAOg=="
 
 //    private fun logging(): HttpLoggingInterceptor {
 //        val logging = HttpLoggingInterceptor()
 //        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 //        return logging
 //    }
+
+//        .addInterceptor(object : Interceptor {
+//            override fun intercept(chain: Interceptor.Chain): Response {
+//
+//                val request = Request.Builder()
+//                    .addHeader("Authorization: Basic ${ApiClient.TOKEN}", "dsad")
+//                    .build()
+//                return chain.proceed(request)
+//            }
+//
+//        })
+
 
     private fun client(): OkHttpClient {
         return OkHttpClient.Builder()
@@ -23,14 +40,6 @@ object ApiClient {
     }
 
     fun getRetrofit(): Retrofit {
-//        HttpLoggingInterceptor().level = HttpLoggingInterceptor.Level.BODY
-//        val logging = HttpLoggingInterceptor()
-//        logging.level = HttpLoggingInterceptor.Level.BODY
-//
-//        val client = OkHttpClient.Builder()
-//            .addInterceptor(logging)
-//            .build()
-
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.media.audiofx.DynamicsProcessing
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,11 +25,9 @@ import com.example.barcodeapp.functions.NetworkHelper
 import com.example.barcodeapp.repository.CodeRepository
 import com.example.barcodeapp.resource.CategoryResource
 import com.example.barcodeapp.resource.SearchResource
-import com.example.barcodeapp.resource.UsersResource
 import com.example.barcodeapp.viewmodels.CategoryViewModel
 import com.example.barcodeapp.viewmodels.ViewModelFactory
 import com.example.barcodeapp.worker.UploadWorker
-import com.mocklets.pluto.Pluto
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -92,6 +89,8 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
+
+
         }
 
         val constraints = Constraints.Builder()
@@ -142,10 +141,8 @@ class HomeFragment : Fragment() {
 
     inner class BarCode : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
-
             val scannedBarcode = p1?.getStringExtra("SCAN_BARCODE1")
             val scanStatus = p1?.getStringExtra("SCAN_STATE")
-
             if ("ok" == scanStatus) {
                 Log.d(TAG, "onReceive barcode: $scannedBarcode")
                 Toast.makeText(p0, scannedBarcode, Toast.LENGTH_SHORT).show()
@@ -170,7 +167,6 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
-
             } else {
                 Log.d(TAG, "onReceive: Scanner bulmadi")
                 Toast.makeText(p0, "Scanner bulmadi", Toast.LENGTH_SHORT).show()

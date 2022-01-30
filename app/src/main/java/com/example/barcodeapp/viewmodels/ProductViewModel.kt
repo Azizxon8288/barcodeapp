@@ -30,7 +30,7 @@ class ProductViewModel(
                             list2.add(
                                 ProductEntity(
                                     it1.id,
-                                    it1.barcode ?: "",
+                                    it1.barcodes?: arrayListOf(),
                                     it1.code ?: 0,
                                     it1.measurement ?: "",
                                     it1.salesPrice ?: 0.0,

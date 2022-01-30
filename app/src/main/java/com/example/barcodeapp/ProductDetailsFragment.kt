@@ -32,6 +32,9 @@ class ProductDetailsFragment : Fragment() {
 
         Log.d(TAG, "onCreateView: ${productEntity.toString()}")
         binding.apply {
+            tv.isSelected = true
+            tv.isSingleLine = true
+
             backBtn.setOnClickListener { findNavController().popBackStack() }
 //            tv.text = lists?.name
 //            image.setImageResource(lists!!.image)
