@@ -11,7 +11,7 @@ import com.example.barcodeapp.data.room.entities.CategoryEntity
 import com.example.barcodeapp.data.room.entities.ProductEntity
 import com.example.barcodeapp.data.room.entities.TypeConvertor
 
-@Database(entities = [CategoryEntity::class, ProductEntity::class], version = 1)
+@Database(entities = [CategoryEntity::class, ProductEntity::class], version = 4)
 @TypeConverters(TypeConvertor::class)
 abstract class AppDatabase : RoomDatabase() {
 

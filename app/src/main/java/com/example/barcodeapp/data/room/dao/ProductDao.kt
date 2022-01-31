@@ -13,15 +13,17 @@ interface ProductDao {
     suspend fun addList(productList: List<ProductEntity>)
 
     @Query("select * from productentity")
-    suspend fun getAllProduct(): List<ProductEntity>
+    fun getAllProduct(): List<ProductEntity>
 
     @Query("select * from productentity where categoryId =:categoryId")
     fun getProductsByCategoryId(categoryId: String): List<ProductEntity>
 
     // main search shu
     @Query("select * from productentity where name like :searchQuery or code like :searchQuery")
-    suspend fun productByCodeSearch(searchQuery: String): List<ProductEntity>
+    fun productByCodeSearch(searchQuery: String): List<ProductEntity>
 
+    @Query("select * from productentity where id =:productId")
+    suspend fun getProductByProductId(productId: String): ProductEntity
 
 //    @Query("select * from productentity where barcode like :str or barcode like :str")
 //    suspend fun productByBarCodeSearch(str: String): List<ProductEntity>

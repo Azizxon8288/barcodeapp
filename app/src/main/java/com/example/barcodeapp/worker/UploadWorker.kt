@@ -3,18 +3,16 @@ package com.example.barcodeapp.worker
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.example.barcodeapp.data.mapper.category.mapToCategory
 import com.example.barcodeapp.data.room.AppDatabase
 import com.example.barcodeapp.data.room.entities.CategoryEntity
 import com.example.barcodeapp.data.room.entities.ProductEntity
 import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.functions.NetworkHelper
 import com.example.barcodeapp.repository.CodeRepository
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.launch
 
 class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {
@@ -54,19 +52,20 @@ class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
 
                 repository.getAllProduct().catch {
 
-                }.collect {it->
+                }.collect { it ->
                     if (it.isSuccessful) {
                         val list = ArrayList<ProductEntity>()
                         it.body()?.forEach {
                             list.add(
                                 ProductEntity(
                                     it.id,
-                                    it.barcodes?: arrayListOf(),
+                                    it.barcodes ?: arrayListOf(),
                                     it.code ?: 0,
                                     it.measurement ?: "",
                                     it.salesPrice ?: 0.0,
                                     it.name ?: "",
                                     it.description ?: "",
+                                    it.imageUrl ?: "",
                                     it.category.id
                                 )
                             )

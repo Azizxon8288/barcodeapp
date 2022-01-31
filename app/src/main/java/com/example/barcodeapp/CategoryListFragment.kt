@@ -1,6 +1,5 @@
 package com.example.barcodeapp
 
-//import com.example.barcodeapp.adapters.CategoryAdapter
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -14,20 +13,25 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import com.example.barcodeapp.adapters.CategoryAdapter
 import com.example.barcodeapp.data.room.AppDatabase
+import com.example.barcodeapp.data.room.entities.CategoryEntity
+import com.example.barcodeapp.data.room.entities.ProductEntity
 import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.databinding.FragmentHomeBinding
 import com.example.barcodeapp.functions.NetworkHelper
+import com.example.barcodeapp.functions.navOptions
 import com.example.barcodeapp.repository.CodeRepository
 import com.example.barcodeapp.resource.CategoryResource
-import com.example.barcodeapp.resource.SearchResource
 import com.example.barcodeapp.viewmodels.CategoryViewModel
 import com.example.barcodeapp.viewmodels.ViewModelFactory
 import com.example.barcodeapp.worker.UploadWorker
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -51,30 +55,33 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private lateinit var categoryViewModel: CategoryViewModel
 
-    //    private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var categoryAdapter: CategoryAdapter
     private val binding get() = _binding!!
 
     private val TAG = "CategoryListFragment"
     private lateinit var appDatabase: AppDatabase
     private lateinit var networkHelper: NetworkHelper
+    private lateinit var repository: CodeRepository
+    private lateinit var list: ArrayList<CategoryEntity>
+    private lateinit var product: ProductEntity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
+        list = ArrayList()
         appDatabase = AppDatabase.getInstance(requireContext())
         networkHelper = NetworkHelper(requireContext())
-
-
+        repository = CodeRepository(appDatabase, ApiClient.webservice)
         categoryViewModel = ViewModelProvider(
             this,
-            ViewModelFactory(CodeRepository(appDatabase, ApiClient.webservice), networkHelper)
+            ViewModelFactory(repository, networkHelper)
         )[CategoryViewModel::class.java]
 
+
         lifecycleScope.launch {
-            /**(Dispatchers.Main)**/
+
             categoryViewModel.getAllCategories().collect {
                 when (it) {
                     is CategoryResource.Error -> {
@@ -82,16 +89,23 @@ class HomeFragment : Fragment() {
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
                     is CategoryResource.Success -> {
-                        Log.d(TAG, "onCreateView: ${it.list}")
+                        list.addAll(it.list)
+                        Log.d(TAG, "onCreateView111: ${it.list}")
                     }
                     is CategoryResource.Loading -> {
 
                     }
                 }
             }
-
-
         }
+        categoryAdapter = CategoryAdapter(list, object : CategoryAdapter.OnItemClick {
+            override fun onItemClick(category: CategoryEntity) {
+                val bundle = Bundle()
+                bundle.putSerializable("category", category)
+                findNavController().navigate(R.id.listFragment, bundle, navOptions())
+            }
+        })
+
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.UNMETERED)
@@ -104,35 +118,17 @@ class HomeFragment : Fragment() {
         WorkManager.getInstance(requireContext()).enqueue(workRequest)
 
 
-        /**        val uploadWorkRequest: WorkRequest =
-        OneTimeWorkRequestBuilder<UploadWorker>()
-        .setScheduleRequestedAt(15, TimeUnit.MINUTES)
-        .build()
-        WorkManager.getInstance(requireContext()).enqueue(uploadWorkRequest)
-
-
-        categoryAdapter = CategoryAdapter(loadData(), object : CategoryAdapter.OnItemClick {
-        override fun onItemClick(category: Category) {
-        val bundle = Bundle()
-        bundle.putSerializable("category", category)
-        findNavController().navigate(R.id.listFragment, bundle, navOptions())
-        }
-
-        })**/
-
-
         val barcodeReceiver = BarCode()
         val intentFilter = IntentFilter("nlscan.action.SCANNER_RESULT")
         requireContext().registerReceiver(barcodeReceiver, intentFilter)
 
         binding.apply {
-//            rv.adapter = categoryAdapter
+            rv.adapter = categoryAdapter
         }
 
 
         return binding.root
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -143,28 +139,55 @@ class HomeFragment : Fragment() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             val scannedBarcode = p1?.getStringExtra("SCAN_BARCODE1")
             val scanStatus = p1?.getStringExtra("SCAN_STATE")
+            var products = ArrayList<ProductEntity>()
             if ("ok" == scanStatus) {
                 Log.d(TAG, "onReceive barcode: $scannedBarcode")
                 Toast.makeText(p0, scannedBarcode, Toast.LENGTH_SHORT).show()
                 lifecycleScope.launch {
-                    categoryViewModel.searchByBarCode(scannedBarcode).collect {
-                        when (it) {
-                            is SearchResource.Error -> {
-                                Log.d(TAG, "onReceive error: ${it.message}")
-                                Toast.makeText(p0, "Bazada bunday maxsulot yuq", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                            is SearchResource.Success -> {
-                                Log.d(TAG, "onReceive success: ${it.productEntity}")
-                                Toast.makeText(p0, "${it.productEntity}", Toast.LENGTH_SHORT).show()
-                                val action = Intent(p0, ProductDetailsFragment::class.java)
-                                action.putExtra("search", it.productEntity)
-                                p0?.startActivity(action)
-                            }
-                            is SearchResource.Loading -> {
-
+                    repository.getDBProducts().catch {
+                        Toast.makeText(p0, it.message, Toast.LENGTH_SHORT).show()
+                    }.collect {
+                        products = it as ArrayList<ProductEntity>
+                    }
+                    var isHave = true
+                    var id = ""
+                    break1@ for (it1 in products) {
+                        Log.d(TAG, "onCreate1: $it1")
+                        val barcodes = it1.barcodes
+                        break2@ for (it2 in barcodes) {
+                            if (it2 == scannedBarcode) {
+                                Log.i(TAG, "onCreate: $it2")
+                                Log.d(TAG, "onCreateT: $it2")
+                                id = it1.id
+                                product = ProductEntity(
+                                    it1.id,
+                                    it1.barcodes,
+                                    it1.code,
+                                    it1.measurement,
+                                    it1.salesPrice,
+                                    it1.name,
+                                    it1.description,
+                                    it1.imageUrl,
+                                    it1.categoryId
+                                )
+                                isHave = false
+                                break@break1
                             }
                         }
+                    }
+                    if (!isHave) {
+                        if (id != "") {
+                            val bundle = Bundle()
+                            bundle.putSerializable("product", product)
+                            findNavController().navigate(R.id.aboutFragment, bundle, navOptions())
+//
+                            Log.d(TAG, "onCreate123: $id")
+                        } else {
+                            Log.d(TAG, "onCreate:BMY ")
+                        }
+                    } else {
+                        Log.d(TAG, "onCreate: Bunday malumot yuq")
+                        Toast.makeText(p0, "Malumot topilmadi", Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {

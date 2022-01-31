@@ -1,9 +1,9 @@
 package com.example.barcodeapp.data.model.product
 
 
+import com.example.barcodeapp.data.model.category.CategoryResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import com.example.barcodeapp.data.model.category.CategoryResponse
 
 @Serializable
 data class ProductResponse(
@@ -11,7 +11,7 @@ data class ProductResponse(
     val id: String,
 
     @SerialName("barcodes")
-    val barcodes: ArrayList<String>? = null,
+    val barcodes: List<String>? = null,
 
     @SerialName("code")
     val code: Int? = null,
@@ -27,6 +27,9 @@ data class ProductResponse(
 
     @SerialName("description")
     val description: String? = null,
+
+    @SerialName("imageUrl")
+    val imageUrl: String? = null,
 
     @SerialName("categoryDTO")
     val category: CategoryResponse,

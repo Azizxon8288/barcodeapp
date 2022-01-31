@@ -8,11 +8,12 @@ import java.io.Serializable
 data class ProductEntity(
     @PrimaryKey
     val id: String,
-    val barcodes: ArrayList<String>?,
+    val barcodes: List<String>,
     val code: Int,
     val measurement: String,
     val salesPrice: Double,
     val name: String,
     val description: String,
+    val imageUrl: String,
     val categoryId: String
 ) : Serializable

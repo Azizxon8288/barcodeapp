@@ -21,7 +21,13 @@
             android:enabled="true"
             android:exported="true"
             android:permission="INTE"
-            tools:ignore="Instantiatable" />
+            tools:ignore="Instantiatable" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".MainActivity"
             android:exported="true">

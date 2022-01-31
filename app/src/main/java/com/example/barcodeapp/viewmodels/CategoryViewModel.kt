@@ -74,10 +74,6 @@ class CategoryViewModel(
                 }
             }
         }
-
         return stateFlow
     }
-
-
-
 }

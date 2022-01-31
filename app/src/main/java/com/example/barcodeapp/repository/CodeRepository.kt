@@ -21,6 +21,14 @@ class CodeRepository(val appDatabase: AppDatabase, val webservice: Webservice) {
         appDatabase.productDao().addList(list)
     }
 
+    fun nameAndCodeSearchList(query: String): List<ProductEntity> {
+        return appDatabase.productDao().productByCodeSearch(query)
+    }
+
+    fun getProductByProductId(productId: String): Flow<ProductEntity> {
+        return flow { appDatabase.productDao().getProductByProductId(productId) }
+    }
+
     suspend fun getDBProducts() = flow { emit(appDatabase.productDao().getAllProduct()) }
 
     //categoryId buyicha
@@ -34,11 +42,11 @@ class CodeRepository(val appDatabase: AppDatabase, val webservice: Webservice) {
 
 
     // Category
-    suspend fun addDbCategories(list: List<CategoryEntity>) {
+        suspend fun addDbCategories(list: List<CategoryEntity>) {
         appDatabase.categoryDao().addList(list)
     }
 
-    suspend fun getDBCategories() = flow { emit(appDatabase.categoryDao().getAllCategory()) }
+    fun getDBCategories() = flow { emit(appDatabase.categoryDao().getAllCategory()) }
 
 
     suspend fun getAllCategory(): Flow<Response<List<CategoryResponse>>> {
