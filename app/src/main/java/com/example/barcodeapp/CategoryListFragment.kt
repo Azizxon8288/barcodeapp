@@ -1,5 +1,6 @@
 package com.example.barcodeapp
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -28,9 +29,12 @@ import com.example.barcodeapp.functions.NetworkHelper
 import com.example.barcodeapp.functions.navOptions
 import com.example.barcodeapp.repository.CodeRepository
 import com.example.barcodeapp.resource.CategoryResource
+import com.example.barcodeapp.resource.ProductResource
 import com.example.barcodeapp.viewmodels.CategoryViewModel
+import com.example.barcodeapp.viewmodels.ProductViewModel
 import com.example.barcodeapp.viewmodels.ViewModelFactory
 import com.example.barcodeapp.worker.UploadWorker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -54,6 +58,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private lateinit var categoryViewModel: CategoryViewModel
+    private lateinit var productViewModel: ProductViewModel
 
     private lateinit var categoryAdapter: CategoryAdapter
     private val binding get() = _binding!!
@@ -78,9 +83,13 @@ class HomeFragment : Fragment() {
             this,
             ViewModelFactory(repository, networkHelper)
         )[CategoryViewModel::class.java]
+        productViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(repository, networkHelper)
+        )[ProductViewModel::class.java]
 
 
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Main) {
 
             categoryViewModel.getAllCategories().collect {
                 when (it) {
@@ -90,6 +99,17 @@ class HomeFragment : Fragment() {
                     }
                     is CategoryResource.Success -> {
                         list.addAll(it.list)
+                        categoryAdapter = CategoryAdapter(it.list, object : CategoryAdapter.OnItemClick {
+                            override fun onItemClick(category: CategoryEntity) {
+                                val bundle = Bundle()
+                                bundle.putSerializable("category", category)
+                                findNavController().navigate(R.id.listFragment, bundle, navOptions())
+                            }
+                        })
+                        binding.rv.adapter = categoryAdapter
+                        getProducts()
+
+
                         Log.d(TAG, "onCreateView111: ${it.list}")
                     }
                     is CategoryResource.Loading -> {
@@ -98,13 +118,9 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        categoryAdapter = CategoryAdapter(list, object : CategoryAdapter.OnItemClick {
-            override fun onItemClick(category: CategoryEntity) {
-                val bundle = Bundle()
-                bundle.putSerializable("category", category)
-                findNavController().navigate(R.id.listFragment, bundle, navOptions())
-            }
-        })
+
+
+
 
 
         val constraints = Constraints.Builder()
@@ -118,13 +134,14 @@ class HomeFragment : Fragment() {
         WorkManager.getInstance(requireContext()).enqueue(workRequest)
 
 
+
         val barcodeReceiver = BarCode()
         val intentFilter = IntentFilter("nlscan.action.SCANNER_RESULT")
         requireContext().registerReceiver(barcodeReceiver, intentFilter)
 
-        binding.apply {
-            rv.adapter = categoryAdapter
-        }
+//        binding.apply {
+//            rv.adapter = categoryAdapter
+//        }
 
 
         return binding.root
@@ -135,7 +152,38 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
+    private fun getProducts() {
+        lifecycleScope.launch() {
+            productViewModel.getProducts().collect {
+                when (it) {
+                    is ProductResource.Error -> {
+                        Log.d(TAG, "onCreateView: ${it.message}")
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    }
+                    is ProductResource.Success -> {
+                        Log.d(TAG, "onCreateView: ${it.list}")
+//                        list.addAll(it.list)
+//                        categoryAdapter = CategoryAdapter(it.list, object : CategoryAdapter.OnItemClick {
+//                            override fun onItemClick(category: CategoryEntity) {
+//                                val bundle = Bundle()
+//                                bundle.putSerializable("category", category)
+//                                findNavController().navigate(R.id.listFragment, bundle, navOptions())
+//                            }
+//                        })
+//                        binding.rv.adapter = categoryAdapter
+//
+//                        Log.d(TAG, "onCreateView111: ${it.list}")
+                    }
+                    is ProductResource.Loading -> {
+
+                    }
+                }
+            }
+        }
+    }
+
     inner class BarCode : BroadcastReceiver() {
+        @SuppressLint("UnsafeProtectedBroadcastReceiver")
         override fun onReceive(p0: Context?, p1: Intent?) {
             val scannedBarcode = p1?.getStringExtra("SCAN_BARCODE1")
             val scanStatus = p1?.getStringExtra("SCAN_STATE")

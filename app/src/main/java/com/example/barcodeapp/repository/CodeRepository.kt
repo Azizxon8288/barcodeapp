@@ -5,16 +5,18 @@ import com.example.barcodeapp.data.model.product.ProductResponse
 import com.example.barcodeapp.data.room.AppDatabase
 import com.example.barcodeapp.data.room.entities.CategoryEntity
 import com.example.barcodeapp.data.room.entities.ProductEntity
+import com.example.barcodeapp.data.service.ServiceGenerator
 import com.example.barcodeapp.data.service.Webservice
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
-class CodeRepository(val appDatabase: AppDatabase, val webservice: Webservice) {
+class CodeRepository(private val appDatabase: AppDatabase, private val webservice: Webservice) {
+    private val request = ServiceGenerator.createService(Webservice::class.java)
 
     // Product
-    suspend fun getAllProduct(): Flow<Response<ArrayList<ProductResponse>>> {
-        return flow { emit(webservice.getAllProducts()) }
+    suspend fun getAllProduct(): Flow<Response<List<ProductResponse>>> {
+        return flow { emit(request.getAllProducts()) }
     }
 
     suspend fun addDbProducts(list: List<ProductEntity>) {
@@ -50,6 +52,6 @@ class CodeRepository(val appDatabase: AppDatabase, val webservice: Webservice) {
 
 
     suspend fun getAllCategory(): Flow<Response<List<CategoryResponse>>> {
-        return flow { emit(webservice.getAllCategories()) }
+        return flow { emit(request.getAllCategories()) }
     }
 }

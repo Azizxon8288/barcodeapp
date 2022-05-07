@@ -1,8 +1,8 @@
 package com.example.barcodeapp.data.model.product
 
 
-import androidx.room.Entity
-import com.example.barcodeapp.data.model.category.Category
+import com.example.barcodeapp.data.room.entities.CategoryEntity
+
 data class Product(
     val id: String,
     val barcodes: List<String>,
@@ -11,5 +11,5 @@ data class Product(
     val salesPrice: Double,
     val name: String,
     val description: String,
-    val category: Category,
+    val category: CategoryEntity,
 )

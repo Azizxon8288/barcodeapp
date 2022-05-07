@@ -59,7 +59,7 @@ class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
                             list.add(
                                 ProductEntity(
                                     it.id,
-                                    it.barcodes ?: arrayListOf(),
+                                    it.barcodes ?: emptyList(),
                                     it.code ?: 0,
                                     it.measurement ?: "",
                                     it.salesPrice ?: 0.0,

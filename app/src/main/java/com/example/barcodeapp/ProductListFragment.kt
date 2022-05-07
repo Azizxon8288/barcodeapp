@@ -95,15 +95,12 @@ class ListFragment : Fragment() {
             }
         })
 
-        binding.searchView.setOnCloseListener(object : SearchView.OnCloseListener {
-            override fun onClose(): Boolean {
-                binding.searchView.visibility = View.GONE
-                binding.searchButtun.visibility = View.VISIBLE
-                binding.tv.visibility = View.VISIBLE
-                return true
-            }
-
-        })
+        binding.searchView.setOnCloseListener {
+            binding.searchView.visibility = View.GONE
+            binding.searchButtun.visibility = View.VISIBLE
+            binding.tv.visibility = View.VISIBLE
+            true
+        }
 
         binding.rv.adapter = listAdapter
         return binding.root

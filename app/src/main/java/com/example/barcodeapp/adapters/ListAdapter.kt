@@ -14,7 +14,10 @@ class ListAdapter(var list: List<ProductEntity>, var listener: OnItemClickListen
         RecyclerView.ViewHolder(itemListBinding.root) {
         fun onBind(product: ProductEntity) {
             itemListBinding.apply {
-                Picasso.get().load(product.imageUrl).placeholder(R.drawable.ic_launcher_background)
+                Picasso
+                    .get()
+                    .load(product.imageUrl)
+                    .placeholder(R.drawable.ic_launcher_background)
                     .error(R.drawable.ic_launcher_background).into(image)
                 tv.text = product.name
                 card1.setOnClickListener {
