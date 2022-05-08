@@ -95,26 +95,33 @@ class HomeFragment : Fragment() {
             categoryViewModel.getAllCategories().collect {
                 when (it) {
                     is CategoryResource.Error -> {
+                        binding.progress.visibility = View.GONE
                         Log.d(TAG, "onCreateView: ${it.message}")
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
                     is CategoryResource.Success -> {
+                        binding.progress.visibility=View.GONE
                         list.addAll(it.list)
-                        categoryAdapter = CategoryAdapter(it.list, object : CategoryAdapter.OnItemClick {
-                            override fun onItemClick(category: CategoryEntity) {
-                                val bundle = Bundle()
-                                categoryEntity = category
-                                bundle.putSerializable("category", category)
-                                findNavController().navigate(R.id.listFragment, bundle, navOptions())
-                            }
-                        })
+                        categoryAdapter =
+                            CategoryAdapter(it.list, object : CategoryAdapter.OnItemClick {
+                                override fun onItemClick(category: CategoryEntity) {
+                                    val bundle = Bundle()
+                                    categoryEntity = category
+                                    bundle.putSerializable("category", category)
+                                    findNavController().navigate(
+                                        R.id.listFragment,
+                                        bundle,
+                                        navOptions()
+                                    )
+                                }
+                            })
                         binding.rv.adapter = categoryAdapter
 
 
                         Log.d(TAG, "onCreateView111: ${it.list}")
                     }
                     is CategoryResource.Loading -> {
-
+                        binding.progress.visibility=View.VISIBLE
                     }
                 }
             }
