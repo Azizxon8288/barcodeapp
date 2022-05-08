@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 //private const val ARG_PARAM1 = "category"
 
-class ListFragment : Fragment() {
+class CategoriesFragment : Fragment() {
 //    private var category: Category? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +67,7 @@ class ListFragment : Fragment() {
                         val bundle = Bundle()
                         productEntity = product
                         bundle.putSerializable("product", product)
-                        findNavController().navigate(R.id.aboutFragment, bundle, navOptions())
+                        findNavController().navigate(R.id.product_details_fragment, bundle, navOptions())
                     }
                 })
             }

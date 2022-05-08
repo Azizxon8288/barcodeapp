@@ -9,22 +9,24 @@
         android:id="@+id/homeFragment"
         android:name="com.example.barcodeapp.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_listFragment"
+            android:id="@+id/action_home_to_categories"
             app:destination="@id/listFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.example.barcodeapp.ListFragment"
+        android:name="com.example.barcodeapp.CategoriesFragment"
         android:label="fragment_list"
-        tools:layout="@layout/fragment_list" >
+        tools:layout="@layout/fragment_list">
         <action
-            android:id="@+id/action_listFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
+            android:id="@+id/action_categories_to_details"
+            app:destination="@id/product_details_fragment" />
     </fragment>
+
     <fragment
-        android:id="@+id/aboutFragment"
+        android:id="@+id/product_details_fragment"
         android:name="com.example.barcodeapp.ProductDetailsFragment"
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />

@@ -14,7 +14,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
+class SyncWorker(appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {
     private lateinit var repository: CodeRepository
     private lateinit var networkHelper: NetworkHelper
