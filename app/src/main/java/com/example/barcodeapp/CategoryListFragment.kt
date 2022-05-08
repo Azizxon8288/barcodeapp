@@ -178,6 +178,7 @@ class HomeFragment : Fragment() {
                                 navOptions()
                             )
 //
+                            requireContext().unregisterReceiver(this@BarcodeScanningListener)
                             Log.d(TAG, "onCreate123: $id")
                         } else {
                             Log.d(TAG, "onCreate:BMY ")
