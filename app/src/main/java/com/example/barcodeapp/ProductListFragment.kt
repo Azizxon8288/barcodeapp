@@ -16,12 +16,14 @@ import com.example.barcodeapp.data.room.entities.CategoryEntity
 import com.example.barcodeapp.data.room.entities.ProductEntity
 import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.databinding.FragmentListBinding
+import com.example.barcodeapp.functions.Constants.categoryEntity
+import com.example.barcodeapp.functions.Constants.productEntity
 import com.example.barcodeapp.functions.navOptions
 import com.example.barcodeapp.repository.CodeRepository
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-private const val ARG_PARAM1 = "category"
+//private const val ARG_PARAM1 = "category"
 
 class ListFragment : Fragment() {
 //    private var category: Category? = null
@@ -39,6 +41,7 @@ class ListFragment : Fragment() {
     private lateinit var repository: CodeRepository
     private lateinit var appDatabase: AppDatabase
     private lateinit var list: List<ProductEntity>
+    private lateinit var category: CategoryEntity
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,10 +49,11 @@ class ListFragment : Fragment() {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         appDatabase = AppDatabase.getInstance(requireContext())
         repository = CodeRepository(appDatabase, ApiClient.webservice)
-        val category = arguments?.getSerializable("category") as CategoryEntity
+//        val category = arguments?.getSerializable("category") as CategoryEntity
+        category = categoryEntity
         binding.tv.text = category.name
         lifecycleScope.launch {
-            repository.getDbProductByCategoryId(categoryId = category.id).catch {
+            repository.getDbProductByCategoryId(category.id).catch {
                 binding.rv.visibility = View.GONE
                 binding.errorTv.visibility = View.VISIBLE
                 Toast.makeText(requireContext(), "Baza mavjud emas", Toast.LENGTH_SHORT).show()
@@ -57,20 +61,24 @@ class ListFragment : Fragment() {
                 binding.rv.visibility = View.VISIBLE
                 binding.errorTv.visibility = View.GONE
                 list = it
+
+                listAdapter = ListAdapter(it, object : ListAdapter.OnItemClickListener {
+                    override fun onItemClick(product: ProductEntity) {
+                        val bundle = Bundle()
+                        productEntity = product
+                        bundle.putSerializable("product", product)
+                        findNavController().navigate(R.id.aboutFragment, bundle, navOptions())
+                    }
+                })
             }
 
         }
-        listAdapter = ListAdapter(list, object : ListAdapter.OnItemClickListener {
-            override fun onItemClick(product: ProductEntity) {
-                val bundle = Bundle()
-                bundle.putSerializable("product", product)
-                findNavController().navigate(R.id.aboutFragment, bundle, navOptions())
-            }
-        })
+
 
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
+
         binding.searchButtun.setOnClickListener {
             binding.tv.visibility = View.GONE
             binding.searchButtun.visibility = View.GONE
@@ -108,16 +116,33 @@ class ListFragment : Fragment() {
     }
 
     fun search(str: String) {
-        val query = "%$str%"
-        list = ArrayList(repository.nameAndCodeSearchList(query))
-        listAdapter.list = list
-        listAdapter.notifyDataSetChanged()
-
+        if (str.isNotEmpty()) {
+            val query = "%$str%"
+            list = ArrayList(repository.nameAndCodeSearchList(query, category.id))
+            listAdapter.list = list
+            listAdapter.notifyDataSetChanged()
+        }
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            repository.getDbProductByCategoryId(categoryId = category.id).catch {
+                binding.rv.visibility = View.GONE
+                binding.errorTv.visibility = View.VISIBLE
+                Toast.makeText(requireContext(), "Baza mavjud emas", Toast.LENGTH_SHORT).show()
+            }.collect {
+                binding.rv.visibility = View.VISIBLE
+                binding.errorTv.visibility = View.GONE
+                list = it
+            }
+
+        }
     }
 }

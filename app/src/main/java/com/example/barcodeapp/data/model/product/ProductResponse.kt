@@ -1,7 +1,6 @@
 package com.example.barcodeapp.data.model.product
 
 
-import com.example.barcodeapp.data.model.category.CategoryResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -31,6 +30,6 @@ data class ProductResponse(
     @SerialName("imageUrl")
     val imageUrl: String? = null,
 
-    @SerialName("categoryDTO")
-    val category: CategoryResponse,
+    @SerialName("categoryId")
+    val categoryId: String,
 )

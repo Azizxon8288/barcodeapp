@@ -23,8 +23,8 @@ class CodeRepository(private val appDatabase: AppDatabase, private val webservic
         appDatabase.productDao().addList(list)
     }
 
-    fun nameAndCodeSearchList(query: String): List<ProductEntity> {
-        return appDatabase.productDao().productByCodeSearch(query)
+    fun nameAndCodeSearchList(query: String,categoryId: String): List<ProductEntity> {
+        return appDatabase.productDao().productByCodeSearch(query,categoryId)
     }
 
     fun getProductByProductId(productId: String): Flow<ProductEntity> {

@@ -25,6 +25,7 @@ import com.example.barcodeapp.data.room.entities.CategoryEntity
 import com.example.barcodeapp.data.room.entities.ProductEntity
 import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.databinding.FragmentHomeBinding
+import com.example.barcodeapp.functions.Constants.categoryEntity
 import com.example.barcodeapp.functions.NetworkHelper
 import com.example.barcodeapp.functions.navOptions
 import com.example.barcodeapp.repository.CodeRepository
@@ -83,10 +84,10 @@ class HomeFragment : Fragment() {
             this,
             ViewModelFactory(repository, networkHelper)
         )[CategoryViewModel::class.java]
-        productViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(repository, networkHelper)
-        )[ProductViewModel::class.java]
+//        productViewModel = ViewModelProvider(
+//            this,
+//            ViewModelFactory(repository, networkHelper)
+//        )[ProductViewModel::class.java]
 
 
         lifecycleScope.launch(Dispatchers.Main) {
@@ -102,12 +103,12 @@ class HomeFragment : Fragment() {
                         categoryAdapter = CategoryAdapter(it.list, object : CategoryAdapter.OnItemClick {
                             override fun onItemClick(category: CategoryEntity) {
                                 val bundle = Bundle()
+                                categoryEntity = category
                                 bundle.putSerializable("category", category)
                                 findNavController().navigate(R.id.listFragment, bundle, navOptions())
                             }
                         })
                         binding.rv.adapter = categoryAdapter
-                        getProducts()
 
 
                         Log.d(TAG, "onCreateView111: ${it.list}")
@@ -119,6 +120,7 @@ class HomeFragment : Fragment() {
             }
         }
 
+        getProducts()
 
 
 
@@ -153,8 +155,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun getProducts() {
-        lifecycleScope.launch() {
-            productViewModel.getProducts().collect {
+        lifecycleScope.launch {
+            categoryViewModel.getProducts().collect {
                 when (it) {
                     is ProductResource.Error -> {
                         Log.d(TAG, "onCreateView: ${it.message}")

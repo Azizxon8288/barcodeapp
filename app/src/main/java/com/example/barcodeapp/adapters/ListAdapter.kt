@@ -18,7 +18,8 @@ class ListAdapter(var list: List<ProductEntity>, var listener: OnItemClickListen
                     .get()
                     .load(product.imageUrl)
                     .placeholder(R.drawable.ic_launcher_background)
-                    .error(R.drawable.ic_launcher_background).into(image)
+                    .error(R.drawable.ic_launcher_background)
+                    .into(image)
                 tv.text = product.name
                 card1.setOnClickListener {
                     listener.onItemClick(product)

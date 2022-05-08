@@ -17,5 +17,5 @@ fun ProductResponse.mapToProduct() =
         name = name ?: id,
         description = description ?: "",
         imageUrl = imageUrl ?: "",
-        categoryId = category.id
+        categoryId = categoryId
     )

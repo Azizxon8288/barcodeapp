@@ -66,7 +66,7 @@ class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
                                     it.name ?: "",
                                     it.description ?: "",
                                     it.imageUrl ?: "",
-                                    it.category.id
+                                    it.categoryId
                                 )
                             )
                         }

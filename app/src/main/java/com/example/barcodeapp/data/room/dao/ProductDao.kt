@@ -19,8 +19,8 @@ interface ProductDao {
     fun getProductsByCategoryId(categoryId: String): List<ProductEntity>
 
     // main search shu
-    @Query("select * from productentity where name like :searchQuery or code like :searchQuery")
-    fun productByCodeSearch(searchQuery: String): List<ProductEntity>
+    @Query("select * from productentity where  categoryId=:categoryId and name like :searchQuery or code like :searchQuery")
+    fun productByCodeSearch(searchQuery: String,categoryId: String): List<ProductEntity>
 
     @Query("select * from productentity where id =:productId")
     suspend fun getProductByProductId(productId: String): ProductEntity
