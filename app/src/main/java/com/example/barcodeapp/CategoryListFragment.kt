@@ -72,10 +72,12 @@ class HomeFragment : Fragment() {
             categoryViewModel.getAllCategories().collect {
                 when (it) {
                     is CategoryResource.Error -> {
+                        binding.progress.visibility = View.GONE
                         Log.d(TAG, "onCreateView: ${it.message}")
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
                     is CategoryResource.Success -> {
+                        binding.progress.visibility=View.GONE
                         list.addAll(it.list)
                         categoryAdapter =
                             CategoryAdapter(it.list, object : CategoryAdapter.OnItemClick {
@@ -96,7 +98,7 @@ class HomeFragment : Fragment() {
                         Log.d(TAG, "onCreateView111: ${it.list}")
                     }
                     is CategoryResource.Loading -> {
-
+                        binding.progress.visibility=View.VISIBLE
                     }
                 }
             }
