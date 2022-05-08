@@ -25,6 +25,7 @@ import com.example.barcodeapp.data.room.entities.CategoryEntity
 import com.example.barcodeapp.data.room.entities.ProductEntity
 import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.databinding.FragmentHomeBinding
+import com.example.barcodeapp.functions.Constants
 import com.example.barcodeapp.functions.Constants.categoryEntity
 import com.example.barcodeapp.functions.NetworkHelper
 import com.example.barcodeapp.functions.navOptions
@@ -170,6 +171,7 @@ class HomeFragment : Fragment() {
                         if (id != "") {
                             val bundle = Bundle()
                             bundle.putSerializable("product", product)
+                            Constants.productEntity = product
                             findNavController().navigate(
                                 R.id.product_details_fragment,
                                 bundle,
