@@ -44,7 +44,7 @@ class ProductViewModel(
 //                        }
                         repository.addDbProducts(body?.mapToProductList()?:emptyList())
                         stateFlow.value = ProductResource.Success(body?.mapToProductList()?:emptyList())
-                        stateFlow.emit(ProductResource.Success(body?.mapToProductList()?:emptyList()))
+//                        stateFlow.emit(ProductResource.Success(body?.mapToProductList()?:emptyList()))
                     } else {
                         when {
                             it.code() in 400..499 -> {
