@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true">
 
         <receiver
-            android:name=".HomeFragment$BarcodeScanningListener"
+            android:name=".MainFragment$BarcodeScanningListener"
             android:enabled="true"
             android:exported="true"
             android:permission="INTE"
