@@ -20,6 +20,10 @@ class CategoryViewModel(
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
+    init {
+        getAllCategories()
+        getProducts()
+    }
 
     fun searchByBarCode(barcode: String?): StateFlow<SearchResource> {
         val stateFlow = MutableStateFlow<SearchResource>(SearchResource.Loading)
@@ -61,11 +65,12 @@ class CategoryViewModel(
 //                                )
 //                            )
 //                        }
-                        repository.addDbProducts(body?.mapToProductList()?:emptyList())
+                        repository.addDbProducts(body?.mapToProductList() ?: emptyList())
 //                        repository.addDbProducts(list2)
 //                        stateFlow.value = ProductResource.Success(list2)
 //                        stateFlow.emit(ProductResource.Success(list2))
-                        stateFlow.value = ProductResource.Success(body?.mapToProductList()?:emptyList())
+                        stateFlow.value =
+                            ProductResource.Success(body?.mapToProductList() ?: emptyList())
 //                        stateFlow.emit(ProductResource.Success(body?.mapToProductList()?:emptyList()))
                     } else {
                         when {
@@ -115,10 +120,11 @@ class CategoryViewModel(
 //                        }
 
 //                        list?.mapToCategory()
-                        repository.addDbCategories(list?.mapToCategory()?: emptyList())
+                        repository.addDbCategories(list?.mapToCategory() ?: emptyList())
 //                        stateFlow.value = CategoryResource.Success(repository.getDBCategories())
 
-                        stateFlow.value = CategoryResource.Success(list?.mapToCategory()?: emptyList())
+                        stateFlow.value =
+                            CategoryResource.Success(list?.mapToCategory() ?: emptyList())
 //                        stateFlow.emit(CategoryResource.Success(list?.mapToCategory()?: emptyList()))
                     } else {
 //                        when {

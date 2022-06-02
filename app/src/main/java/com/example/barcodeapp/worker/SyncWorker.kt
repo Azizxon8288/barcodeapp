@@ -3,9 +3,9 @@ package com.example.barcodeapp.worker
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.example.barcodeapp.data.mapper.category.mapToCategory
+import com.example.barcodeapp.data.mapper.product.mapToProductList
 import com.example.barcodeapp.data.room.AppDatabase
-import com.example.barcodeapp.data.room.entities.CategoryEntity
-import com.example.barcodeapp.data.room.entities.ProductEntity
 import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.functions.NetworkHelper
 import com.example.barcodeapp.repository.CodeRepository
@@ -32,20 +32,21 @@ class SyncWorker(appContext: Context, workerParams: WorkerParameters) :
 
                 }.collect {
                     if (it.isSuccessful) {
-                        val body = it.body()
-                        val list = ArrayList<CategoryEntity>()
+//                        val body = it.body()
+//                        val list = ArrayList<CategoryEntity>()
+//
+//                        body?.forEach { it1 ->
+//                            list.add(
+//                                CategoryEntity(
+//                                    it1.id,
+//                                    it1.productCount,
+//                                    it1.name,
+//                                    it1.imageUrl
+//                                )
+//                            )
+//                        }
+                        repository.addDbCategories(it.body()?.mapToCategory() ?: emptyList())
 
-                        body?.forEach { it1 ->
-                            list.add(
-                                CategoryEntity(
-                                    it1.id,
-                                    it1.productCount,
-                                    it1.name,
-                                    it1.imageUrl
-                                )
-                            )
-                        }
-                        repository.addDbCategories(list)
                     }
                 }
 
@@ -54,23 +55,24 @@ class SyncWorker(appContext: Context, workerParams: WorkerParameters) :
 
                 }.collect { it ->
                     if (it.isSuccessful) {
-                        val list = ArrayList<ProductEntity>()
-                        it.body()?.forEach {
-                            list.add(
-                                ProductEntity(
-                                    it.id,
-                                    it.barcodes ?: emptyList(),
-                                    it.code ?: 0,
-                                    it.measurement ?: "",
-                                    it.salesPrice ?: 0.0,
-                                    it.name ?: "",
-                                    it.description ?: "",
-                                    it.imageUrl ?: "",
-                                    it.categoryId
-                                )
-                            )
-                        }
-                        repository.addDbProducts(list)
+//                        val list = ArrayList<ProductEntity>()
+//                        it.body()?.forEach {
+//                            list.add(
+//                                ProductEntity(
+//                                    it.id,
+//                                    it.barcodes ?: emptyList(),
+//                                    it.code ?: 0,
+//                                    it.measurement ?: "",
+//                                    it.salesPrice ?: 0.0,
+//                                    it.name ?: "",
+//                                    it.description ?: "",
+//                                    it.imageUrl ?: "",
+//                                    it.categoryId
+//                                )
+//                            )
+//                        }
+                        repository.addDbProducts(it.body()?.mapToProductList() ?: emptyList())
+
                     }
                 }
 

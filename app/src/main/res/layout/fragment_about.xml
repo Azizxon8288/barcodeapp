@@ -36,51 +36,53 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:textColor="@color/black"
-                android:singleLine="true"
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal"
-                app:layout_constraintRight_toRightOf="parent"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="@color/black"
                 android:textSize="@dimen/_16ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/back_btn"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
-        android:layout_margin="@dimen/_10sdp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/image"-->
+    <!--        android:layout_width="@dimen/_100sdp"-->
+    <!--        android:layout_height="@dimen/_100sdp"-->
+    <!--        android:layout_margin="@dimen/_10sdp"-->
+    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/layout" />-->
 
     <TextView
         android:id="@+id/des"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="Description"
+        app:layout_constraintRight_toRightOf="parent"
         android:textColor="@color/black"
-        android:textSize="@dimen/_16ssp"
-        app:layout_constraintBottom_toTopOf="@id/piece"
-        app:layout_constraintLeft_toRightOf="@id/image"
-        app:layout_constraintTop_toTopOf="@id/image" />
+        android:textSize="@dimen/_18ssp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout" />
 
     <TextView
         android:id="@+id/piece"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_margin="@dimen/_10sdp"
         android:text="1 kg  -->  250000"
         android:textColor="@color/black"
-        android:textSize="@dimen/_16ssp"
-        app:layout_constraintBottom_toBottomOf="@id/image"
-        app:layout_constraintLeft_toRightOf="@id/image"
+        android:textSize="@dimen/_18ssp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/des" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
