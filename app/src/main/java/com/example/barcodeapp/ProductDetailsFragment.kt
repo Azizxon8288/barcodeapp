@@ -2,6 +2,8 @@ package com.example.barcodeapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +27,8 @@ class ProductDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private val TAG = "ProductDetailsFragment"
 
+    private lateinit var handler: Handler
+
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +36,12 @@ class ProductDetailsFragment : Fragment() {
     ): View? {
         _binding = FragmentAboutBinding.inflate(inflater, container, false)
         val productEntity = productEntity
+        handler = Handler(Looper.getMainLooper())
+
+        handler.postDelayed({
+            findNavController().popBackStack()
+        }, 15000)
+
 
 
         binding.apply {
