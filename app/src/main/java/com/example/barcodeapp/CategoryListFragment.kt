@@ -1,5 +1,10 @@
 package com.example.barcodeapp
 
+import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,21 +15,30 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.example.barcodeapp.adapters.CategoryAdapter
 import com.example.barcodeapp.data.room.AppDatabase
 import com.example.barcodeapp.data.room.entities.CategoryEntity
 import com.example.barcodeapp.data.room.entities.ProductEntity
 import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.databinding.FragmentHomeBinding
+import com.example.barcodeapp.functions.Constants
 import com.example.barcodeapp.functions.Constants.categoryEntity
 import com.example.barcodeapp.functions.NetworkHelper
 import com.example.barcodeapp.functions.navOptions
 import com.example.barcodeapp.repository.CodeRepository
 import com.example.barcodeapp.resource.CategoryResource
 import com.example.barcodeapp.viewmodels.CategoryViewModel
+import com.example.barcodeapp.viewmodels.ProductViewModel
 import com.example.barcodeapp.viewmodels.ViewModelFactory
+import com.example.barcodeapp.worker.SyncWorker
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -58,10 +72,12 @@ class HomeFragment : Fragment() {
             categoryViewModel.getAllCategories().collect {
                 when (it) {
                     is CategoryResource.Error -> {
+                        binding.card.visibility = View.GONE
                         Log.d(TAG, "onCreateView: ${it.message}")
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
                     is CategoryResource.Success -> {
+                        binding.card.visibility = View.GONE
                         list.addAll(it.list)
                         categoryAdapter =
                             CategoryAdapter(it.list, object : CategoryAdapter.OnItemClick {
@@ -82,7 +98,7 @@ class HomeFragment : Fragment() {
                         Log.d(TAG, "onCreateView111: ${it.list}")
                     }
                     is CategoryResource.Loading -> {
-
+                        binding.card.visibility = View.VISIBLE
                     }
                 }
             }
@@ -179,6 +195,27 @@ class HomeFragment : Fragment() {
 //            }
 //        }
 //
+                            requireContext().unregisterReceiver(this@BarcodeScanningListener)
+                            Log.d(TAG, "onCreate123: $id")
+                        } else {
+                            Log.d(TAG, "onCreate:BMY ")
+                        }
+                    } else {
+                        Log.d(TAG, "onCreate: Bunday malumot yuq")
+                        Toast.makeText(p0, "Malumot topilmadi", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                Log.d(TAG, "onReceive: Scanner bulmadi")
+                Toast.makeText(p0, "Barcodeni o'qishni imkoni bo'lmadi", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
+    private fun getProducts() {
+        lifecycleScope.launch { categoryViewModel.getProducts().collect {} }
+    }
 //    }
 }
 
