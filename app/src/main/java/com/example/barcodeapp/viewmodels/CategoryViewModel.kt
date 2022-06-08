@@ -32,8 +32,8 @@ class CategoryViewModel(
             repository.searchByBarCode(barcode).catch {
                 stateFlow.value = SearchResource.Error(it.message.toString())
             }.collect {
-                Log.d("TAG", "searchByBarCode: ${it.barcodes}")
-                stateFlow.value = SearchResource.Success(it)
+                Log.d("TAG", "searchByBarCode: ${it?.barcodes}")
+                stateFlow.value = SearchResource.Success(it!!)
             }
         }
         return stateFlow

@@ -7,7 +7,9 @@ import com.example.barcodeapp.data.room.entities.ProductEntity
 object Constants {
     var auth_username: String = "Админстратор"
     var auth_password: String = ""
-    var ip: String = "http://185.196.214.27/PRICE_CHECKER/hs/price/"
+//    var ip: String = "http://185.196.214.27/PRICE_CHECKER/hs/price/"
+    var ip: String = "http://185.196.214.27/MAGAZIN5/hs/price/"
+
 
     var basicAuth = "Basic " +
             Base64.encodeToString(

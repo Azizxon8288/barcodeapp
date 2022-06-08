@@ -6,50 +6,65 @@
     android:layout_height="match_parent"
     tools:context=".ProductDetailsFragment">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/layout"
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        app:cardElevation="5dp"
+<!--    <com.google.android.material.card.MaterialCardView-->
+<!--        android:id="@+id/layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?actionBarSize"-->
+<!--        app:cardElevation="5dp"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
+
+<!--            <ImageButton-->
+<!--                android:id="@+id/back_btn"-->
+<!--                android:layout_width="@dimen/_40sdp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="@android:color/transparent"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="true"-->
+<!--                android:src="@drawable/ic_baseline_arrow_back_24"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="@dimen/_10sdp"-->
+<!--                android:ellipsize="marquee"-->
+<!--                android:fadingEdge="horizontal"-->
+<!--                android:marqueeRepeatLimit="marquee_forever"-->
+<!--                android:scrollHorizontally="true"-->
+<!--                android:singleLine="true"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="@dimen/_16ssp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintLeft_toRightOf="@id/back_btn"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--    </com.google.android.material.card.MaterialCardView>-->
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_45ssp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/des"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:text="lkajdjsakldjdjasdlkasdkl\nsajdlkjdsakljdsakl"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageButton
-                android:id="@+id/back_btn"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_baseline_arrow_back_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:ellipsize="marquee"
-                android:fadingEdge="horizontal"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_16ssp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/back_btn"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
 
     <!--    <ImageView-->
     <!--        android:id="@+id/image"-->
@@ -66,22 +81,27 @@
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_15sdp"
         android:ellipsize="end"
+        android:visibility="gone"
         android:maxLines="1"
         android:text="Description"
         app:layout_constraintRight_toRightOf="parent"
         android:textColor="@color/black"
-        android:textSize="@dimen/_18ssp"
+        android:textSize="@dimen/_40ssp"
+        app:layout_constraintBottom_toTopOf="@id/piece"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout" />
+        app:layout_constraintTop_toBottomOf="@id/tv1" />
 
     <TextView
         android:id="@+id/piece"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_60sdp"
+        android:gravity="center"
         android:text="1 kg  -->  250000"
         android:textColor="@color/black"
-        android:textSize="@dimen/_18ssp"
+        android:textSize="@dimen/_50ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/des" />
 

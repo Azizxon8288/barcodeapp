@@ -38,7 +38,7 @@ class CodeRepository(private val appDatabase: AppDatabase, private val webservic
         flow { emit(appDatabase.productDao().getProductsByCategoryId(categoryId)) }
 
     //  Search
-    suspend fun searchByBarCode(barcode: String?): Flow<ProductEntity> {
+    suspend fun searchByBarCode(barcode: String?): Flow<ProductEntity?> {
         return flow { emit(appDatabase.productDao().searchByBarCode(barcode)) }
     }
 

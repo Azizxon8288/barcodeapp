@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,8 +28,6 @@ class ProductDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private val TAG = "ProductDetailsFragment"
 
-    private lateinit var handler: Handler
-
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,22 +35,26 @@ class ProductDetailsFragment : Fragment() {
     ): View? {
         _binding = FragmentAboutBinding.inflate(inflater, container, false)
         val productEntity = productEntity
-        handler = Handler(Looper.getMainLooper())
 
-        handler.postDelayed({
-            findNavController().popBackStack()
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (_binding != null) {
+                Log.w("ProductDetailsFragment","binding is not null")
+                findNavController().popBackStack()
+            } else {
+                Log.w("ProductDetailsFragment","binding is null")
+            }
         }, 15000)
 
 
 
         binding.apply {
-            tv.isSelected = true
-            tv.isSingleLine = true
-
-            backBtn.setOnClickListener {
-                findNavController().popBackStack()
-            }
-            tv.text = productEntity.name
+//            tv.isSelected = true
+//            tv.isSingleLine = true
+//
+//            backBtn.setOnClickListener {
+//                findNavController().popBackStack()
+//            }
+            tv1.text = productEntity.name
             if (productEntity.measurement.isEmpty()) {
                 piece.text = "1 null --> ${productEntity.salesPrice}"
             } else {
