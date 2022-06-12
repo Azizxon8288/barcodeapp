@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -122,6 +124,15 @@ class MainFragment : Fragment() {
                             centerTv.visibility = View.GONE
                             unexpectedErrorTv.visibility = View.VISIBLE
                             notFoundErrorTv.visibility = View.GONE
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                if (_binding != null) {
+                                    centerTv.visibility = View.VISIBLE
+                                    unexpectedErrorTv.visibility = View.GONE
+                                    notFoundErrorTv.visibility = View.GONE
+                                }else{
+                                 Log.e("ABC","Error")
+                                }
+                            },2000)
                         }.collect {
                             if (it != null) {
                                 centerTv.visibility = View.GONE
@@ -141,6 +152,15 @@ class MainFragment : Fragment() {
                                 centerTv.visibility = View.GONE
                                 unexpectedErrorTv.visibility = View.GONE
                                 notFoundErrorTv.visibility = View.VISIBLE
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    if (_binding != null) {
+                                        centerTv.visibility = View.VISIBLE
+                                        unexpectedErrorTv.visibility = View.GONE
+                                        notFoundErrorTv.visibility = View.GONE
+                                    }else{
+                                        Log.e("ABC","Error")
+                                    }
+                                },2000)
                             }
                         }
                 }
@@ -149,20 +169,17 @@ class MainFragment : Fragment() {
                 centerTv.visibility = View.GONE
                 unexpectedErrorTv.visibility = View.VISIBLE
                 notFoundErrorTv.visibility = View.GONE
-                    //tel qivoring telegramdan
-//                Toast.makeText(p0, "Barcodeni o'qishni imkoni bo'lmadi", Toast.LENGTH_SHORT).show()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if (_binding != null) {
+                        centerTv.visibility = View.VISIBLE
+                        unexpectedErrorTv.visibility = View.GONE
+                        notFoundErrorTv.visibility = View.GONE
+                    }else{
+                        Log.e("ABC","Error")
+                    }
+                },2000)
             }
         }
 
     }
-//    companion object {
-//        @JvmStatic
-//        fun newInstance(param1: String, param2: String) =
-//            MainFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-//                }
-//            }
-//    }
 }

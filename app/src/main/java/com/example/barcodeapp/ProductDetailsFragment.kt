@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.barcodeapp.databinding.FragmentAboutBinding
 import com.example.barcodeapp.functions.Constants.productEntity
+import com.example.barcodeapp.functions.formatNumber
 
 
 class ProductDetailsFragment : Fragment() {
@@ -28,12 +29,25 @@ class ProductDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private val TAG = "ProductDetailsFragment"
 
+//    private lateinit var appDatabase: AppDatabase
+//    private lateinit var networkHelper: NetworkHelper
+//    private lateinit var repository: CodeRepository
+//    private lateinit var categoryViewModel: CategoryViewModel
+
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAboutBinding.inflate(inflater, container, false)
+
+//        appDatabase = AppDatabase.getInstance(requireContext())
+//        networkHelper = NetworkHelper(requireContext())
+//        repository = CodeRepository(appDatabase, ApiClient.webservice)
+//        categoryViewModel = ViewModelProvider(
+//            this,
+//            ViewModelFactory(repository, networkHelper)
+//        )[CategoryViewModel::class.java]
         val productEntity = productEntity
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -43,8 +57,11 @@ class ProductDetailsFragment : Fragment() {
             } else {
                 Log.w("ProductDetailsFragment","binding is null")
             }
-        }, 15000)
+        }, 5000)
 
+//        val barcodeReceiver = BarcodeScanningListener()
+//        val intentFilter = IntentFilter("nlscan.action.SCANNER_RESULT")
+//        requireContext().registerReceiver(barcodeReceiver, intentFilter)
 
 
         binding.apply {
@@ -58,7 +75,7 @@ class ProductDetailsFragment : Fragment() {
             if (productEntity.measurement.isEmpty()) {
                 piece.text = "1 null --> ${productEntity.salesPrice}"
             } else {
-                piece.text = "1 ${productEntity.measurement} --> ${productEntity.salesPrice}"
+                piece.text = "${formatNumber(productEntity.salesPrice)}/${productEntity.measurement}"
             }
             //            image.setImageResource(R.drawable.ic_launcher_background)
             if (productEntity.description.isEmpty()) {
@@ -74,6 +91,79 @@ class ProductDetailsFragment : Fragment() {
         return binding.root
     }
 
+
+//    inner class BarcodeScanningListener : BroadcastReceiver() {
+//        @SuppressLint("UnsafeProtectedBroadcastReceiver")
+//        override fun onReceive(p0: Context?, p1: Intent?) {
+//            val scannedBarcode = p1?.getStringExtra("SCAN_BARCODE1")
+//            val scanStatus = p1?.getStringExtra("SCAN_STATE")
+//            if ("ok" == scanStatus) {
+//                Log.d(TAG, "onReceive barcode: $scannedBarcode")
+//                lifecycleScope.launch {
+//                    repository.searchByBarCode(scannedBarcode)
+//                        .catch {
+////                            centerTv.visibility = View.GONE
+////                            unexpectedErrorTv.visibility = View.VISIBLE
+////                            notFoundErrorTv.visibility = View.GONE
+////                            Handler(Looper.getMainLooper()).postDelayed({
+////                                if (_binding != null) {
+////                                    centerTv.visibility = View.VISIBLE
+////                                    unexpectedErrorTv.visibility = View.GONE
+////                                    notFoundErrorTv.visibility = View.GONE
+////                                }else{
+////                                    Log.e("ABC","Error")
+////                                }
+////                            },2000)
+//                        }.collect {
+//                            if (it != null) {
+////                                centerTv.visibility = View.GONE
+////                                unexpectedErrorTv.visibility = View.GONE
+////                                notFoundErrorTv.visibility = View.GONE
+//
+////                                Toast.makeText(
+////                                    requireContext(),
+////                                    "Found product ${it.name}",
+////                                    Toast.LENGTH_SHORT
+////                                ).show()
+//
+//                                productEntity = it
+////                                findNavController().navigate(R.id.product_details_fragment)
+////                                requireContext().unregisterReceiver(this@BarcodeScanningListener)
+//                            } else {
+////                                centerTv.visibility = View.GONE
+////                                unexpectedErrorTv.visibility = View.GONE
+////                                notFoundErrorTv.visibility = View.VISIBLE
+////                                Handler(Looper.getMainLooper()).postDelayed({
+////                                    if (_binding != null) {
+////                                        centerTv.visibility = View.VISIBLE
+////                                        unexpectedErrorTv.visibility = View.GONE
+////                                        notFoundErrorTv.visibility = View.GONE
+////                                    }else{
+////                                        Log.e("ABC","Error")
+////                                    }
+////                                },2000)
+//                                Log.e("12","12")
+//                            }
+//                        }
+//                }
+//            } else {
+//                Log.d(TAG, "onReceive: Scanner bulmadi")
+////                centerTv.visibility = View.GONE
+////                unexpectedErrorTv.visibility = View.VISIBLE
+////                notFoundErrorTv.visibility = View.GONE
+////                Handler(Looper.getMainLooper()).postDelayed({
+////                    if (_binding != null) {
+////                        centerTv.visibility = View.VISIBLE
+////                        unexpectedErrorTv.visibility = View.GONE
+////                        notFoundErrorTv.visibility = View.GONE
+////                    }else{
+////                        Log.e("ABC","Error")
+////                    }
+////                },2000)
+//            }
+//        }
+//
+//    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

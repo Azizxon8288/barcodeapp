@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Context.MODE_PRIVATE
 import androidx.navigation.NavOptions
 import com.example.barcodeapp.R
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 fun navOptions(): NavOptions {
     return NavOptions.Builder()
@@ -36,5 +39,13 @@ fun setFirst(screen: String, activity: Activity) {
 fun getFirst(activity: Activity): String? {
     val sharedPreferences = activity.getSharedPreferences("SCREEN", MODE_PRIVATE)
     return sharedPreferences.getString("SCREEN", Constants.screen)
+}
 
+fun formatNumber(value: Number?): String? {
+    val formatString = "###,###,###.######"
+    val formatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
+    formatSymbols.decimalSeparator = '.'
+    formatSymbols.groupingSeparator = ' '
+    val formatter = DecimalFormat(formatString, formatSymbols)
+    return formatter.format(value)
 }
