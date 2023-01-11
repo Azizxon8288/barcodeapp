@@ -48,10 +48,10 @@ class HomeFragment : Fragment() {
         list = ArrayList()
         appDatabase = AppDatabase.getInstance(requireContext())
         networkHelper = NetworkHelper(requireContext())
-        repository = CodeRepository(appDatabase, ApiClient.webservice)
+        repository = CodeRepository(appDatabase, ApiClient.webservice,requireContext())
         categoryViewModel = ViewModelProvider(
             this,
-            ViewModelFactory(repository, networkHelper)
+            ViewModelFactory(repository, networkHelper,requireContext(),appDatabase)
         )[CategoryViewModel::class.java]
 
         lifecycleScope.launch(Dispatchers.Main) {

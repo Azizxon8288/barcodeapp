@@ -1,6 +1,7 @@
 package com.example.barcodeapp.dialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,12 +28,12 @@ data class DialogInput(var isHave: Boolean) : DialogFragment() {
         if (isHave) {
             binding.ipTv.setText(getIpAddress(requireActivity()))
             binding.confirm.setOnClickListener {
-                if (binding.ipTv.text != null && !binding.ipTv.text.toString()
-                        .isEmpty() && binding.ipTv.text.toString().trim().length > 0
+                if (binding.ipTv.text != null && binding.ipTv.text.toString().isNotEmpty() && binding.ipTv.text.toString().trim().isNotEmpty()
                 ) {
                     val ipAddress = binding.ipTv.text.toString()
                     setIpAddress(ipAddress, requireActivity())
                     binding.ipTv.setText(ipAddress)
+                    Log.e("ip",ipAddress)
                     Toast.makeText(requireContext(), "Success Ip", Toast.LENGTH_SHORT).show()
                     dismiss()
                 } else {
@@ -44,8 +45,8 @@ data class DialogInput(var isHave: Boolean) : DialogFragment() {
             binding.address.text = "Screen"
             binding.ipTv.setText(getFirst(requireActivity()))
             binding.confirm.setOnClickListener {
-                if (binding.ipTv.text != null && !binding.ipTv.text.toString()
-                        .isEmpty() && binding.ipTv.text.toString().trim().length > 0
+                if (binding.ipTv.text != null && binding.ipTv.text.toString().isNotEmpty() && binding.ipTv.text.toString()
+                        .trim().isNotEmpty()
                 ) {
                     val screen = binding.ipTv.text.toString()
                     setFirst(screen, requireActivity())

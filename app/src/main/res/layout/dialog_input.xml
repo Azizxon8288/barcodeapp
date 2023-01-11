@@ -20,7 +20,8 @@
     <EditText
         android:id="@+id/ip_tv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_100sdp"
+        android:background="@color/white"
         android:textColor="@color/pluto___colorPrimaryDark"
         android:layout_marginBottom="10sp" />
 

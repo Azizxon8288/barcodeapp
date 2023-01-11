@@ -1,17 +1,14 @@
 package com.example.barcodeapp.data.service
 
+import com.example.barcodeapp.functions.Constants.ip
 import com.mocklets.pluto.PlutoInterceptor
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    //    const val BASE_URL = "http://185.196.214.27/PRICE_CHECKER/hs/price/"
-    const val BASE_URL = "https://jsonplaceholder.typicode.com/"
+        const val BASE_URL = "http://185.196.214.27/PRICE_CHECKER/hs/price/"
+//    const val BASE_URL = "https://jsonplaceholder.typicode.com/"
     const val TOKEN = "0JDQtNC80LjQvdGB0YLRgNCw0YLQvtGAOg=="
 //    const val TOKEN="Basic 0JDQtNC80LjQvdGB0YLRgNCw0YLQvtGAOg=="
 
@@ -39,9 +36,10 @@ object ApiClient {
             .build()
     }
 
+
     fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(ip)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client())
             .build()

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.barcodeapp.databinding.FragmentSettingBinding
 import com.example.barcodeapp.dialog.DialogInput
 import com.example.barcodeapp.functions.getFirst
@@ -41,6 +42,10 @@ class SettingFragment : Fragment() {
         binding.tvFirst.setOnClickListener {
             val dialogInput = DialogInput(false)
             dialogInput.show(childFragmentManager, "INPUT_DIALOG")
+        }
+
+        binding.tvProduct.setOnClickListener {
+            findNavController().navigate(R.id.listFragment)
         }
         return binding.root
     }

@@ -1,5 +1,6 @@
 package com.example.barcodeapp.repository
 
+import android.content.Context
 import com.example.barcodeapp.data.model.category.CategoryResponse
 import com.example.barcodeapp.data.model.product.ProductResponse
 import com.example.barcodeapp.data.room.AppDatabase
@@ -11,20 +12,33 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
-class CodeRepository(private val appDatabase: AppDatabase, private val webservice: Webservice) {
-    private val request = ServiceGenerator.createService(Webservice::class.java)
+class CodeRepository(
+    private val appDatabase: AppDatabase,
+    private val webservice: Webservice,
+    context: Context
+) {
+    private val request = ServiceGenerator.createService(Webservice::class.java, context)
 
     // Product
     suspend fun getAllProduct(): Flow<Response<List<ProductResponse>>> {
         return flow { emit(request.getAllProducts()) }
     }
 
+    suspend fun getProducts(page: Int) = flow { emit(request.getProduct(page = page)) }
+
+    suspend fun getProductsChanges(time: Int) =
+        flow { emit(request.getProductsChanges(time = time)) }
+
+    suspend fun getOneProduct(barcode: String): Flow<Response<List<ProductResponse>>> {
+        return flow { emit(request.getOneProduct(barcode = barcode)) }
+    }
+
     suspend fun addDbProducts(list: List<ProductEntity>) {
         appDatabase.productDao().addList(list)
     }
 
-    fun nameAndCodeSearchList(query: String,categoryId: String): List<ProductEntity> {
-        return appDatabase.productDao().productByCodeSearch(query,categoryId)
+    fun nameAndCodeSearchList(query: String, categoryId: String): List<ProductEntity> {
+        return appDatabase.productDao().productByCodeSearch(query)
     }
 
     fun getProductByProductId(productId: String): Flow<ProductEntity> {
@@ -44,7 +58,7 @@ class CodeRepository(private val appDatabase: AppDatabase, private val webservic
 
 
     // Category
-        suspend fun addDbCategories(list: List<CategoryEntity>) {
+    suspend fun addDbCategories(list: List<CategoryEntity>) {
         appDatabase.categoryDao().addList(list)
     }
 

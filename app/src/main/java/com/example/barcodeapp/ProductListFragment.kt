@@ -12,11 +12,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.barcodeapp.adapters.ListAdapter
 import com.example.barcodeapp.data.room.AppDatabase
-import com.example.barcodeapp.data.room.entities.CategoryEntity
 import com.example.barcodeapp.data.room.entities.ProductEntity
 import com.example.barcodeapp.data.service.ApiClient
 import com.example.barcodeapp.databinding.FragmentListBinding
-import com.example.barcodeapp.functions.Constants.categoryEntity
 import com.example.barcodeapp.functions.Constants.productEntity
 import com.example.barcodeapp.functions.navOptions
 import com.example.barcodeapp.repository.CodeRepository
@@ -41,19 +39,19 @@ class CategoriesFragment : Fragment() {
     private lateinit var repository: CodeRepository
     private lateinit var appDatabase: AppDatabase
     private lateinit var list: List<ProductEntity>
-    private lateinit var category: CategoryEntity
+//    private lateinit var category: CategoryEntity
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         appDatabase = AppDatabase.getInstance(requireContext())
-        repository = CodeRepository(appDatabase, ApiClient.webservice)
+        repository = CodeRepository(appDatabase, ApiClient.webservice,requireContext())
 //        val category = arguments?.getSerializable("category") as CategoryEntity
-        category = categoryEntity
-        binding.tv.text = category.name
+//        category = categoryEntity
+//        binding.tv.text = category.name
         lifecycleScope.launch {
-            repository.getDbProductByCategoryId(category.id).catch {
+            repository.getDBProducts().catch {
                 binding.rv.visibility = View.GONE
                 binding.errorTv.visibility = View.VISIBLE
                 Toast.makeText(requireContext(), "Baza mavjud emas", Toast.LENGTH_SHORT).show()
@@ -118,7 +116,7 @@ class CategoriesFragment : Fragment() {
     fun search(str: String) {
         if (str.isNotEmpty()) {
             val query = "%$str%"
-            list = ArrayList(repository.nameAndCodeSearchList(query, category.id))
+            list = ArrayList(repository.nameAndCodeSearchList(query, ""))
             listAdapter.list = list
             listAdapter.notifyDataSetChanged()
         }
@@ -132,17 +130,17 @@ class CategoriesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch {
-            repository.getDbProductByCategoryId(categoryId = category.id).catch {
-                binding.rv.visibility = View.GONE
-                binding.errorTv.visibility = View.VISIBLE
-                Toast.makeText(requireContext(), "Baza mavjud emas", Toast.LENGTH_SHORT).show()
-            }.collect {
-                binding.rv.visibility = View.VISIBLE
-                binding.errorTv.visibility = View.GONE
-                list = it
-            }
-
-        }
+//        lifecycleScope.launch {
+//            repository.getDbProductByCategoryId(categoryId = category.id).catch {
+//                binding.rv.visibility = View.GONE
+//                binding.errorTv.visibility = View.VISIBLE
+//                Toast.makeText(requireContext(), "Baza mavjud emas", Toast.LENGTH_SHORT).show()
+//            }.collect {
+//                binding.rv.visibility = View.VISIBLE
+//                binding.errorTv.visibility = View.GONE
+//                list = it
+//            }
+//
+//        }
     }
 }

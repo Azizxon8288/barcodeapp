@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@drawable/ic_back"
@@ -52,19 +53,24 @@
 <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 <!--    </com.google.android.material.card.MaterialCardView>-->
 
-    <TextView
-        android:id="@+id/tv1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_10sdp"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_45ssp"
-        android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@id/des"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:text="lkajdjsakldjdjasdlkasdklsajdlkjdsakljdsakl"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/_35sdp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_40ssp"
+            android:maxLines="3"
+            android:gravity="center"
+            android:text="dsahdhkasdhaskjhdasdhkasjdhkasjhdkjashdkjashdkashdkjashkdsah"/>
+    </LinearLayout>
+
 
 
     <!--    <ImageView-->
@@ -75,35 +81,22 @@
     <!--        app:layout_constraintLeft_toLeftOf="parent"-->
     <!--        app:layout_constraintTop_toBottomOf="@id/layout" />-->
 
-    <TextView
-        android:id="@+id/des"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:ellipsize="end"
-        android:visibility="gone"
-        android:maxLines="1"
-        android:text="Description"
-        app:layout_constraintRight_toRightOf="parent"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_40ssp"
-        app:layout_constraintBottom_toTopOf="@id/piece"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv1" />
 
-    <TextView
-        android:id="@+id/piece"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_50sdp"
+    <LinearLayout
+        android:layout_weight="1.5"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:text="250000/kg"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_50ssp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/des" />
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/piece"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="250000 so'm\nkg"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_50ssp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</LinearLayout>

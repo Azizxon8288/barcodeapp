@@ -24,7 +24,7 @@ class SyncWorker(appContext: Context, workerParams: WorkerParameters) :
         networkHelper = NetworkHelper(applicationContext)
         job = Job()
         repository =
-            CodeRepository(AppDatabase.getInstance(applicationContext), ApiClient.webservice)
+            CodeRepository(AppDatabase.getInstance(applicationContext), ApiClient.webservice,applicationContext)
         GlobalScope.launch {
             if (networkHelper.isNetworkConnected()) {
 

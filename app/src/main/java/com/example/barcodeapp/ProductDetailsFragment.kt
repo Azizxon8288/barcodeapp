@@ -75,16 +75,16 @@ class ProductDetailsFragment : Fragment() {
             if (productEntity.measurement.isEmpty()) {
                 piece.text = "1 null --> ${productEntity.salesPrice}"
             } else {
-                piece.text = "${formatNumber(productEntity.salesPrice)}/${productEntity.measurement}"
+                piece.text = "${formatNumber(productEntity.salesPrice) + " so'm"}\n${productEntity.measurement}"
             }
             //            image.setImageResource(R.drawable.ic_launcher_background)
-            if (productEntity.description.isEmpty()) {
-//                des.text = "null"
-                des.visibility = View.GONE
-            } else {
-                des.visibility = View.VISIBLE
-                des.text = productEntity.description
-            }
+//            if (productEntity.description.isEmpty()) {
+////                des.text = "null"
+//                des.visibility = View.GONE
+//            } else {
+//                des.visibility = View.VISIBLE
+//                des.text = productEntity.description
+//            }
 
 
         }

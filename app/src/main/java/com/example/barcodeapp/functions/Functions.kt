@@ -1,6 +1,7 @@
 package com.example.barcodeapp.functions
 
 import android.app.Activity
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.navigation.NavOptions
 import com.example.barcodeapp.R
@@ -16,15 +17,15 @@ fun navOptions(): NavOptions {
         .setPopExitAnim(R.anim.pop_exit).build()
 }
 
-fun setIpAddress(ipAddress: String, activity: Activity) {
-    val sharedPreferences = activity.getSharedPreferences("IP_ADDRESS", MODE_PRIVATE)
+fun setIpAddress(ipAddress: String, context: Context) {
+    val sharedPreferences = context.getSharedPreferences("IP_ADDRESS", MODE_PRIVATE)
     val edit = sharedPreferences.edit()
     edit.putString("IP_ADDRESS", ipAddress)
     edit.apply()
 }
 
-fun getIpAddress(activity:Activity): String? {
-    val sharedPreferences = activity.getSharedPreferences("IP_ADDRESS", MODE_PRIVATE)
+fun getIpAddress(context: Context): String? {
+    val sharedPreferences = context.getSharedPreferences("IP_ADDRESS", MODE_PRIVATE)
     return sharedPreferences.getString("IP_ADDRESS", Constants.ip)
 
 }
